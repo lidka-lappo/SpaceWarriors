@@ -20,7 +20,7 @@ public class ShopFrame extends JFrame  implements ActionListener {
 	JPanel blackPanel;
 	JPanel whitePanel;
 	JLabel shopLabel;
-	JLabel moneyLabel;
+	JLabel moneyLabel; 
 	JButton colorButton;
 	JButton buyButton;
 	JButton backButton;
