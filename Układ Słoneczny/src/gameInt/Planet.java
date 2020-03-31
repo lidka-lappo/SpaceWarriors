@@ -1,45 +1,48 @@
 import java.awt.Color;
 import java.awt.Point;
 
-public class Planet { //no i s³oneczko:)
-	int r;
-	Point xy;
-	Color color;
-	int mass;
-	String name;
+public class Planet { //no i sloneczko:)
+	int radious;
+	Point center;
+	Color planetColor;
+	int planetMass;
+	String planetName;
+	double velocityX, velocityY;
 	
-	public Planet(int rr, Point xxyy, Color col, int m, String nam) {
-		r = rr;
-		xy = xxyy;
-		color = col;
-		mass = m;
-		name = nam;
+	public Planet(int rr, Point xxyy, Color col, int m, String nam, double Vx, double Vy) {
+		radious = rr;
+		center = xxyy;
+		planetColor = col;
+		planetMass = m;
+		planetName = nam;
+		velocityX = Vx;
+		velocityY = Vy;
 	}
 	
 	void info ()
 	{
-		System.out.println(name);
-		System.out.println("r = "+ r + ", color" + color + ", mass = " + mass +", location: "+xy.getX() + ","+xy.getY());
+		System.out.println(planetName);
+		System.out.println("r = "+ radious + ", color" + planetColor + ", mass = " + planetMass +", location: "+center.getX() + ","+center.getY());
 	}
-	int getR ()
+	int getRadious ()
 	{
-		return r;
+		return radious;
 	}
-	Point getXY ()
+	Point getCenter ()
 	{
-		return xy;
+		return center;
 	}
 	Color getColor ()
 	{
-		return color;
+		return planetColo;
 	}
 	int getMass ()
 	{
-		return mass;
+		return planetMass;
 	}
 	String getName ()
 	{
-		return name;
+		return planetName;
 	}
 
 }
