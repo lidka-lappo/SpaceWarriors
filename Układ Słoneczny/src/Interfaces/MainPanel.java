@@ -1,17 +1,17 @@
 package Interfaces;
 import java.awt.*;
-import java.awt.geom.*;
 
-//import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class MainPanel extends JPanel {
+
+public class MainPanel extends JPanel implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
 	JPanel mainPanel;	
 	Planet planets[];
 	int wid;
 	int heig;
+	public boolean czynny =true;
 	
 	public MainPanel(int width, int height, Planet pl[]) {
 		
@@ -31,54 +31,112 @@ public class MainPanel extends JPanel {
 		super.paintComponent(g);
 		g.setColor(Color.black);//t³o xd
 		g.fillRect(0, 0, wid, heig);
-		Graphics2D g2d = (Graphics2D) g;
-		Font f = new Font("Arial", 1, 15);
 		// planetki
-		for (int i = 0; i<planets.length; i++) {
-			Ellipse2D circle = new Ellipse2D.Double(planets[i].getXY().getX(), planets[i].getXY().getY(), planets[i].getR(), planets[i].getR());//(xy[i].getX(), xy[i].getY(), r[i], r[i]);
-			g.setColor(planets[i].getColor());
-			g2d.fill(circle);
-			
-			if (planets[i].getName()=="SUN") {
-				g.setColor(Color.yellow);
-				g2d.setStroke(new BasicStroke(20));
-				g2d.draw(circle);
-			}
-			if (planets[i].getName()=="SATURN") {
-				g.setColor(Color.white);
-				g2d.setStroke(new BasicStroke(10));
-				g2d.drawLine((int)planets[i].getXY().getX(), (int)planets[i].getXY().getY()+planets[i].getR(), (int)planets[i].getXY().getX()+planets[i].getR(), (int)planets[i].getXY().getY());
-			}
-			g.setColor(Color.green);
-			
-			g.setFont(f);
-			g.drawString(planets[i].getName(),  (int)planets[i].getXY().getX(), (int)planets[i].getXY().getY());
-			
+		for (int i = 0; i<9; i++) {
+			planets[i].paintPlanet(g);	
 		}
-
+		/*Graphics2D g2d = (Graphics2D) g;
+		g2d.setColor(Color.red);
+		g2d.fillRect(560, 460, 10, 10);*/
 	
 	}
 	
-/*	 public static void main(String[] args) {
-	        JFrame frame = new JFrame();
-	        frame.setSize(640, 480);
-	        Point p = new Point (200, 200);
-	        Point pp = new Point (100, 100);
-	        Point xxyy[]= new Point[]{p, pp};
-	        int rr[] = new int[] {50, 10};
-	        Color col[] = new Color[] {Color.orange, Color.red};
-	        int m[] = new int[] {1000, 10};
-	        String nam[] = new String[] {"SUN", "MARS"};
-	        Planet pl[] = new Planet[nam.length];
-	        for (int i = 0; i<nam.length; i++) {
-	        	pl[i] = new Planet(rr[i], xxyy[i], col[i], m[i], nam[i]);
-	        	pl[i].info();
-	        }
-	        MainPanel panel = new MainPanel(640, 480, pl);
-	        frame.add(panel);
-	        frame.setVisible(true);
-	    }*/
+
 	
+	public void run() {
+		int tmpX = 0;
+		int tmpY = 0;
+		Point tmpPXY;
+		
+		int tmpVX = 0;
+		int tmpVY = 0;
+		int tmpV = 0;
+		
+		double tmpSunDist=0;
+		double sunDistX =0;
+		double sunDistY=0;
+		
+		int znakVx =1;
+		int znakVy =1;
+		double sina =0; //wartości dla pierwszej ćwiartki;
+		double cosa =0;
+		
+		
+		while(czynny) {
+			for (int i = 1; i<9; i++)
+			{
+				//zmiana położenia x i y planety
+				tmpX=(int)planets[i].getXY().getX();
+				tmpVX=planets[i].getVelX();
+				tmpX+=tmpVX;
+				
+				tmpY=(int)planets[i].getXY().getY();
+				tmpVY=planets[i].getVelY();
+				tmpY+=tmpVY;
+	
+				//zmiana prędkości x i y planety
+				
+				tmpV=planets[i].getVel();
+			
+				tmpSunDist=planets[i].getSDist();
+				sunDistX = tmpX -planets[0].getXY().getX();
+				sunDistY = tmpY -planets[0].getXY().getY();
+				
 
+				
+				
+				sina = Math.abs(sunDistY)/tmpSunDist;
+				cosa = Math.abs(sunDistX)/tmpSunDist;
+				
+				
+				//jaki znak sinusa
+				if(sunDistY>0)
+					znakVx=-1;
+				else
+					znakVx=1;
+				//jaki znak cosinusa
+				if(sunDistX<0)
+					znakVy=-1;
+				else
+					znakVy=1;
+				
+				
+				if(sina>1) //zabazpieczenie by planety się zbyt daleko nie oddaliły
+					sina=1;
+
+				if(cosa>1)
+					cosa=1;
+				
+				
+				//nowe prędkości
+				//dla xsów
+				tmpVX =(int) (tmpV*sina*znakVx);
+								
+				//dla yków
+				tmpVY =(int) (tmpV*cosa*znakVy);
+						
+				
+				
+				//nowe położenie
+				tmpPXY = new Point(tmpX, tmpY);
+		
+				//set
+				planets[i].setXY(tmpPXY);
+				planets[i].setVelX(tmpVX);
+				planets[i].setVelY(tmpVY);			
+				
+			}
+
+			this.repaint();
+		
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		
+		}
+	}
+	
+	
 }
-

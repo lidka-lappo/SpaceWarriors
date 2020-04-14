@@ -1,63 +1,79 @@
 package Interfaces;
 
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GraphicsConfiguration;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 
 public class GameInterface extends JFrame implements ActionListener{
 	JFrame frame;
 	JButton startButton;
 	JButton endButton;
-	MainPanel mainPanel;
 	JPanel dataPanel;
 	JLabel velocityLabel;
 	JLabel fuelLabel;
-	String title = "SPACE WARRIORS, odlotowa przeja¿d¿ka";
+	String title = "SPACE WARRIORS, odlotowa przejazdzka";
 	int width;
-	int height;
+	int height; 
 	Planet planets[];
+	public MainPanel mainPanel;
 	
 	private static final long serialVersionUID = 1L;
 	public  GameInterface() throws HeadlessException {
+		
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		frame.setLayout(null);
 		frame.setLayout(null);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();     
 		frame.setTitle(title);
 		frame.getContentPane().setBackground(Color.black);
-		
+ 
 		width = (int)screenSize.getWidth();
-		height = (int)screenSize.getHeight();
+		height = (int)screenSize.getHeight();	
+       
+		//planetki, ewentualne TO DO opracować wczytywaie z pliku
+		 int sunX = width/2;
+		 int sunY = height/2;
+		 Point xxyy[]= new Point[]{new Point (sunX , sunY), new Point(sunX+10 ,sunY), new Point((sunX+20), sunY), new Point((sunX+30), sunY), new Point((sunX+40), sunY), new Point((sunX+80), sunY), new Point((sunX+120), sunY), new Point((sunX+160), sunY), new Point((sunX+200), sunY)};
+		 double dist[] = new double[] {0, 10, 20, 30, 40, 80, 120, 160, 200};
+		 int rr[] = new int[] {40, 4, 6, 6, 4, 20, 20, 12, 12};
+	     int vy[] = new int[] {0, 20, 10, 10, 9, 7, 4, 3, 2};
+	     int vx[] = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0};
+	     Color col[] = new Color[] {Color.red, Color.gray, Color.orange, Color.blue, Color.red, Color.yellow, Color.orange, Color.blue, Color.lightGray};
+	     int m[] = new int[] {1000, 10, 10, 10, 10, 10, 10 ,10 ,10};//trzeba jakos sprytnie przeliczyc, ¿eby nie walnac w slonce od razu 
+	     String nam[] = new String[] {"SUN", "MERCURY", "VENUS", "EARTH", "MARS", "JUPITER", "SATURN", "URANUS", "NEPTUNE"};
+	 	 planets = new Planet[nam.length];
+	     for (int i = 0; i<nam.length; i++) {
+	        planets[i] = new Planet(rr [i], xxyy[i], dist[i], vx[i], vy[i], col[i], m[i], nam[i]);
+	       	planets[i].info();
+	     }
+		  
+	     
+		 mainPanel = new MainPanel(650, 650, planets);
+		 mainPanel.setBackground(Color.black);
+		 mainPanel.setLayout(null);
+		 mainPanel.setBounds(0, 0, width, height);
 		
-		////tworzymy cia³a niebieskie
-        Point xxyy[]= new Point[]{new Point (width/2, height/2), new Point(200, 200), new Point(250, 250), new Point(300, 300), new Point(350, 350), new Point(400, 400), new Point(450, 450), new Point(500, 500), new Point(550, 550)};
-        int rr[] = new int[] {100, 10, 15, 15, 10, 50, 50, 30, 30};
-        Color col[] = new Color[] {Color.red, Color.gray, Color.orange, Color.blue, Color.red, Color.yellow, Color.orange, Color.blue, Color.lightGray};
-        int m[] = new int[] {1000, 10, 10, 10, 10, 10, 10 ,10 ,10};//trzeba jakos sprytnie przeliczyc, ¿eby nie walnac w slonce od razu 
-        String nam[] = new String[] {"SUN", "MERCURY", "VENUS", "EARTH", "MARS", "JUPITER", "SATURN", "URANUS", "NEPTUNE"};
-        planets = new Planet[nam.length];
-        for (int i = 0; i<nam.length; i++) {
-        	planets[i] = new Planet(rr [i], xxyy[i], col[i], m[i], nam[i]);
-        	planets[i].info();
-        }
-	    
-	    MainPanel mainPanel = new MainPanel(width, height, planets);
-		mainPanel.setBackground(Color.black);
-		mainPanel.setLayout(null);
-		mainPanel.setBounds(0, 0, width, height);		
+		
+		
+		
 		//start		
 		startButton = new JButton("START");
 		startButton.setBackground(Color.green);	
@@ -66,6 +82,7 @@ public class GameInterface extends JFrame implements ActionListener{
 		startButton.setActionCommand("1");      
 		startButton.setBounds((width-150)/2, 20, 150, 70);
 		mainPanel.add(startButton);
+		
 		//end
 		endButton = new JButton("end");
 		endButton.setBackground(Color.red);	
@@ -74,6 +91,7 @@ public class GameInterface extends JFrame implements ActionListener{
 		endButton.setBounds(width-100, height-120, 70, 70);
 		mainPanel.add(endButton);
 		//data
+		
 		dataPanel = new JPanel();
 		dataPanel.setBackground(Color.white);		
 		dataPanel.setBounds(0, height - height/3, width/4, height/3);
@@ -83,26 +101,13 @@ public class GameInterface extends JFrame implements ActionListener{
 		fuelLabel = new JLabel(" fuel supply: ");//+fuel
 		dataPanel.add(fuelLabel);
 		dataPanel.add(new JLabel("wykres paliwka"));
-		
 		mainPanel.add(dataPanel);
+
+		
 		frame.add(mainPanel);
 		frame.setVisible(true);
 	}
 
-	public  GameInterface(GraphicsConfiguration gc) {
-		super(gc);
-		// TODO Auto-generated constructor stub
-	}
-
-	public  GameInterface(String title) throws HeadlessException {
-		super(title);
-		// TODO Auto-generated constructor stub
-	}
-
-	public  GameInterface(String title, GraphicsConfiguration gc) {
-		super(title, gc);
-		// TODO Auto-generated constructor stub
-	}
 
 	
 	@Override
@@ -122,9 +127,21 @@ public class GameInterface extends JFrame implements ActionListener{
 
 	    }
 	
-	
-	/*public static void main(String[] args) {
-		new  GameInterface();
+	public static void main(String[] args) {
 
-	}*/
+		SwingUtilities.invokeLater(new Runnable() {
+
+			public void run() {
+				GameInterface newGame = new GameInterface();
+				
+				
+				ExecutorService exec = Executors.newFixedThreadPool(1);
+				exec.execute(newGame.mainPanel);
+				exec.shutdown();
+				
+				
+				
+			}
+		});
+	}
 }
