@@ -1,26 +1,4 @@
-package Interfaces;
 
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.HeadlessException;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-
-public class GameInterface extends JFrame implements ActionListener{
 	JFrame frame;
 	JButton startButton;
 	JButton endButton;
@@ -51,16 +29,20 @@ public class GameInterface extends JFrame implements ActionListener{
 		//planetki, ewentualne TO DO opracować wczytywaie z pliku
 		 int sunX = width/2;
 		 int sunY = height/2;
-		 Point xxyy[]= new Point[]{new Point (sunX , sunY), new Point(sunX+10 ,sunY), new Point((sunX+20), sunY), new Point((sunX+30), sunY), new Point((sunX+40), sunY), new Point((sunX+80), sunY), new Point((sunX+120), sunY), new Point((sunX+160), sunY), new Point((sunX+200), sunY)};
-		 double dist[] = new double[] {0, 10, 20, 30, 40, 80, 120, 160, 200};
-		 int rr[] = new int[] {40, 4, 6, 6, 4, 20, 20, 12, 12};
-	     int vy[] = new int[] {0, 20, 10, 10, 9, 7, 4, 3, 2};
+		 
+		 int dist[] = new int[] {0, 50, 60, 70, 80, 120, 160, 200, 240};
+		 int rr[] = new int[] {40, 8, 12, 12, 8, 40, 40, 24, 24};
+	     int vy[] = new int[] {0, 9, 8, 7, 6, 5, 4, 3, 2};
 	     int vx[] = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0};
 	     Color col[] = new Color[] {Color.red, Color.gray, Color.orange, Color.blue, Color.red, Color.yellow, Color.orange, Color.blue, Color.lightGray};
 	     int m[] = new int[] {1000, 10, 10, 10, 10, 10, 10 ,10 ,10};//trzeba jakos sprytnie przeliczyc, ¿eby nie walnac w slonce od razu 
 	     String nam[] = new String[] {"SUN", "MERCURY", "VENUS", "EARTH", "MARS", "JUPITER", "SATURN", "URANUS", "NEPTUNE"};
-	 	 planets = new Planet[nam.length];
-	     for (int i = 0; i<nam.length; i++) {
+	 	 
+	     Point xxyy[]= new Point[nam.length];
+	     planets = new Planet[nam.length];
+	     for (int i = 0; i<nam.length; i++)
+	     {
+	    	xxyy[i]=new Point(sunX+dist[i], sunY);
 	        planets[i] = new Planet(rr [i], xxyy[i], dist[i], vx[i], vy[i], col[i], m[i], nam[i]);
 	       	planets[i].info();
 	     }

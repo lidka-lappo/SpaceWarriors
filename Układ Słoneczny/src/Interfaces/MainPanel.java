@@ -123,7 +123,12 @@ public class MainPanel extends JPanel implements Runnable {
 				//set
 				planets[i].setXY(tmpPXY);
 				planets[i].setVelX(tmpVX);
-				planets[i].setVelY(tmpVY);			
+				planets[i].setVelY(tmpVY);
+				
+				
+				
+
+			
 				
 			}
 
@@ -140,3 +145,5 @@ public class MainPanel extends JPanel implements Runnable {
 	
 	
 }
+
+

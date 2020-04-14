@@ -18,9 +18,9 @@ public class Planet { //no i słoneczko:)
 	int velX;
 	int velY;
 	int vel;
-	double sunDistance;
+	int sunDistance;
 	
-	public Planet(int rr, Point xxyy, double dist, int Vx, int Vy, Color col, int m, String nam) {
+	public Planet(int rr, Point xxyy, int dist, int Vx, int Vy, Color col, int m, String nam) {
 		radius = rr;
 		center = xxyy;
 		color = col;
@@ -95,7 +95,7 @@ public class Planet { //no i słoneczko:)
 	}
 	
 	
-	void setSDist (double SD)
+	void setSDist (int SD)
 	{
 		this.sunDistance=SD;
 	}
