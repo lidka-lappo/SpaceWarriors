@@ -44,86 +44,35 @@ public class MainPanel extends JPanel implements Runnable {
 
 	
 	public void run() {
+		
+		double tmpSunDist=0;
+		
+		double tmpA = 0;
+		double tmpAV = 0;
+		
 		int tmpX = 0;
 		int tmpY = 0;
 		Point tmpPXY;
-		
-		int tmpVX = 0;
-		int tmpVY = 0;
-		int tmpV = 0;
-		
-		double tmpSunDist=0;
-		double sunDistX =0;
-		double sunDistY=0;
-		
-		int znakVx =1;
-		int znakVy =1;
-		double sina =0; //wartości dla pierwszej ćwiartki;
-		double cosa =0;
-		
-		
+
 		while(czynny) {
 			for (int i = 1; i<9; i++)
 			{
-				//zmiana położenia x i y planety
-				tmpX=(int)planets[i].getXY().getX();
-				tmpVX=planets[i].getVelX();
-				tmpX+=tmpVX;
-				
-				tmpY=(int)planets[i].getXY().getY();
-				tmpVY=planets[i].getVelY();
-				tmpY+=tmpVY;
-	
-				//zmiana prędkości x i y planety
-				
-				tmpV=planets[i].getVel();
-			
 				tmpSunDist=planets[i].getSDist();
-				sunDistX = tmpX -planets[0].getXY().getX();
-				sunDistY = tmpY -planets[0].getXY().getY();
 				
-
+				tmpA=planets[i].getAngle();
+				tmpAV=planets[i].getAngleVelocity();
+				tmpA+=tmpAV;
+				if(tmpA>360)
+					tmpA=0;
+				planets[i].setAngle(tmpA);
 				
-				
-				sina = Math.abs(sunDistY)/tmpSunDist;
-				cosa = Math.abs(sunDistX)/tmpSunDist;
-				
-				
-				//jaki znak sinusa
-				if(sunDistY>0)
-					znakVx=-1;
-				else
-					znakVx=1;
-				//jaki znak cosinusa
-				if(sunDistX<0)
-					znakVy=-1;
-				else
-					znakVy=1;
-				
-				
-				if(sina>1) //zabazpieczenie by planety się zbyt daleko nie oddaliły
-					sina=1;
-
-				if(cosa>1)
-					cosa=1;
-				
-				
-				//nowe prędkości
-				//dla xsów
-				tmpVX =(int) (tmpV*sina*znakVx);
-								
-				//dla yków
-				tmpVY =(int) (tmpV*cosa*znakVy);
-						
-				
-				
-				//nowe położenie
+				tmpX=(int)planets[i].getXY().getX();
+				tmpY=(int)planets[i].getXY().getY();
+				tmpX=(int)planets[0].getXY().getX()+(int) (tmpSunDist*Math.sin(tmpA));
+				tmpY=(int)planets[0].getXY().getY()+(int) (tmpSunDist*Math.cos(tmpA));
+	
 				tmpPXY = new Point(tmpX, tmpY);
-		
-				//set
 				planets[i].setXY(tmpPXY);
-				planets[i].setVelX(tmpVX);
-				planets[i].setVelY(tmpVY);			
 				
 			}
 
@@ -140,3 +89,4 @@ public class MainPanel extends JPanel implements Runnable {
 	
 	
 }
+

@@ -15,20 +15,17 @@ public class Planet { //no i słoneczko:)
 	Color color;
 	int mass;
 	String name;
-	int velX;
-	int velY;
-	int vel;
-	double sunDistance;
-	
-	public Planet(int rr, Point xxyy, double dist, int Vx, int Vy, Color col, int m, String nam) {
+	int sunDistance;
+	double angleVelocity;
+	double angle;
+	public Planet(int rr, Point xxyy, int dist, double aV, double a, Color col, int m, String nam) {
 		radius = rr;
 		center = xxyy;
 		color = col;
 		mass = m;
 		name = nam;
-		velY =Vy;
-		velX = Vx;
-		vel = Vy; //na razie dla uproszczenia początkowe położenie planet jest na osi OX (dla O w Sloncu)
+		angleVelocity =aV;
+		angle= a;
 		sunDistance = dist;
 	}
 	
@@ -64,29 +61,19 @@ public class Planet { //no i słoneczko:)
 		return name;
 	}
 	
-	int getVelX ()
+	double getAngle ()
 	{
-		return velX;
+		return angle;
 	}
 	
-	void setVelX (int Vx)
+	void setAngle (double a)
 	{
-		this.velX =Vx;
+		this.angle =a;
 	}
 	
-	int getVelY ()
+	double getAngleVelocity ()
 	{
-		return velY;
-	}
-	
-	void setVelY (int Vy)
-	{
-		this.velY =Vy;
-	}
-	
-	int getVel ()
-	{
-		return vel;
+		return angleVelocity;
 	}
 	
 	double getSDist ()
@@ -95,7 +82,7 @@ public class Planet { //no i słoneczko:)
 	}
 	
 	
-	void setSDist (double SD)
+	void setSDist (int SD)
 	{
 		this.sunDistance=SD;
 	}
