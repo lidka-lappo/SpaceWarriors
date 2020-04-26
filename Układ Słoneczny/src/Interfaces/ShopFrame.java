@@ -30,7 +30,6 @@ public class ShopFrame extends JFrame  implements ActionListener {
 	int money = 100;
 	int price = 40;
 	
-	Color rocketColor;
 	Color newRocketColor;
 	
 	private static final long serialVersionUID = 1L;
@@ -118,7 +117,7 @@ public class ShopFrame extends JFrame  implements ActionListener {
             	 if(money>=price)
          		{
          			money-=price;
-         			rocketColor = newRocketColor;
+         			MainPanel.setRocketColor(newRocketColor);
          		}
             	 else {
             		 buyButton.setBackground(Color.red);

@@ -1,4 +1,4 @@
-package projekt_ja;
+package shop;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -127,7 +127,8 @@ public class ShopFrame extends JFrame  implements ActionListener {
             	 System.out.println(money);
                 break;
              case "back":
-         		frame.setVisible(false);//znika
+         	//	frame.setVisible(false);//znika
+         		frame.dispose();
              break;
             
         }

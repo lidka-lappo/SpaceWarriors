@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,7 +19,7 @@ import javax.swing.JPanel;
 
 public class MainMenu extends JFrame implements ActionListener {
 
-    JFrame frame;
+    static JFrame frame;
 
     JPanel panelTop;
     JPanel panelBottom;
@@ -27,7 +28,7 @@ public class MainMenu extends JFrame implements ActionListener {
     JButton shopButton;
     JButton newGameButton;
     
-    JLabel balance;
+    static JLabel balance;
     JLabel chooseLevel;
     JLabel shop;
 
@@ -35,10 +36,13 @@ public class MainMenu extends JFrame implements ActionListener {
     CircleButton planet2;
     CircleButton planet3;
     CircleButton planet4;
-    int money;
+    static int money = 0;
     
     JMenu menu;
     JMenuItem i1, i2, i3;
+    
+    static GameInterface newGame;
+    int lvl = 1;
 
     private static final long serialVersionUID = 1L;
 
@@ -46,7 +50,6 @@ public class MainMenu extends JFrame implements ActionListener {
         frame = new JFrame();
         frame.setSize(640, 480);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
 
         panelTop = new JPanel(new FlowLayout());
         panelTop.setBackground(Color.black);
@@ -58,7 +61,7 @@ public class MainMenu extends JFrame implements ActionListener {
         panelBottom = new JPanel();
         panelBottom.setLayout(new GridLayout(1,3));
         balance = new JLabel("Balance: ");
-        balance.setText(String.valueOf(money));
+        balance.setText(String.valueOf(money)+"$");
         panelBottom.add(balance);
        
         newGameButton = new JButton("New Game");
@@ -129,17 +132,29 @@ public class MainMenu extends JFrame implements ActionListener {
         int choice = Integer.parseInt(arg0.getActionCommand());
         switch (choice) {
         	case 1:
-                frame.setVisible(false);
-            	new GameInterface();
+            	newGame = new GameInterface();            	
         		System.out.println("0");
+        		newGame.mainPanel.setLevel(lvl); 
+        		newGame.mainPanel.setDestinationPlanet();
             break;
-             case 2:
-                frame.setVisible(false);   
+             case 2:   
                 new ShopFrame();
             	System.out.println("1");
                 break;
             case 3:
             	System.out.println("2");
+            	break;
+            case 5:
+            	lvl = 1;
+            	break;
+            case 6:
+            	lvl = 2;
+            	break;
+            case 7:
+            	lvl = 3;
+            	break;
+            case 8:
+            	lvl = 4;
             	break;
         }
 

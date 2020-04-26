@@ -98,12 +98,19 @@ public class Planet { //no i słoneczko:)
 				g.setColor(Color.yellow);
 				g2d.setStroke(new BasicStroke(20));
 				g2d.draw(circle);
-			}
-			if (getName()=="SATURN") {
+		 }
+		 if (getName()=="SATURN") {
 				g.setColor(Color.white);
 				g2d.setStroke(new BasicStroke(2));
-				g2d.drawLine((int)getXY().getX(), (int)getXY().getY()-2*getR(), (int)getXY().getX(), (int)getXY().getY()+2*getR());
-			}
+				g2d.drawLine((int)getXY().getX()-getR(), (int)getXY().getY()-getR(), (int)getXY().getX()+getR(), (int)getXY().getY()+getR());
+		 }
+		 ///oznaczenie docelowej planety
+		 if(this == MainPanel.destinationPlanet) {
+			 g.setColor(Color.white);
+			 g2d.setStroke(new BasicStroke(2));			 
+			 g2d.draw(circle);
+		 }
+			 	
 			
 			g.setColor(Color.green);
 			

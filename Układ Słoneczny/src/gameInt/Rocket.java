@@ -1,4 +1,4 @@
-\\Na razie  bez rysowania i zmian w prędkości i położeniu
+//Na razie  bez rysowania i zmian w prędkości i położeniu
 import java.awt.Color;
 import java.awt.Point;
 
@@ -48,6 +48,9 @@ public class Rocket {
 	{
 		return widthOfBase;
 	}
+//	double getVelocity() {
+		
+//	}
 
 	
 	

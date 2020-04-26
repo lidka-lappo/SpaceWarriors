@@ -1,19 +1,36 @@
 package Interfaces;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
+
+import static java.lang.Math.*;
 
 
-public class MainPanel extends JPanel implements Runnable {
+
+public class MainPanel extends JPanel implements Runnable, ActionListener, KeyListener {
 	private static final long serialVersionUID = 1L;
 	
 	JPanel mainPanel;	
 	Planet planets[];
+	static Planet destinationPlanet;
 	int wid;
 	int heig;
-	public boolean czynny =true;
-	Rocket rocket;
-	Color rocketColor= Color.blue;
+	public static boolean czynny =true;
+	static Rocket rocket;
+	static Color rocketColor= Color.blue;
+	///
+	double velx = 0;
+	double vely = 0;
+	Timer t = new Timer(10, this);
+	static int fuel = 100;
+	static int level;
+	boolean winner;
+	
 	public MainPanel(int width, int height, Planet pl[]) {
 		
 		wid = width;
@@ -25,13 +42,48 @@ public class MainPanel extends JPanel implements Runnable {
 		
 		planets = pl.clone();
 		rocket = new Rocket(new Point(500,300),  rocketColor);
-
+		////////na razie tu, potem jakoœ w w¹tku
+		t.restart();
+		addKeyListener(this);
+		setFocusable(true);
+		setFocusTraversalKeysEnabled(false);
+		
 	}
+
+	static void setRocketColor(Color c) {
+		rocketColor = c;
+	}
+	
+	static int getFuel() {
+		return fuel;
+	}
+	
+	void setLevel(int lvl) {
+		level = lvl;
+	}
+	
+	void setDestinationPlanet() {
+		switch(level) {
+		case 1:
+			destinationPlanet = planets[6]; //Saturn
+			break;
+		case 2:
+			destinationPlanet = planets[5]; //Jowisz
+			break;
+		case 3:
+			destinationPlanet = planets[3]; //Ziemia
+			break;
+		case 4:
+			destinationPlanet = planets[4]; //Mars
+			break;		
+		}
+	}
+
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.setColor(Color.black);//tÂ³o xd
+		g.setColor(Color.black);
 		g.fillRect(0, 0, wid, heig);
 		rocket.paintRocket(g);
 		
@@ -86,8 +138,6 @@ public class MainPanel extends JPanel implements Runnable {
 			cosa = DistX/Dist;
 			tmpaX = cosa*planets[0].getMass()/(Dist*Dist); 
 		    tmpaY = sina*planets[0].getMass()/(Dist*Dist);
-
-			
 			
 			for (int i = 1; i<9; i++)
 			{
@@ -114,9 +164,7 @@ public class MainPanel extends JPanel implements Runnable {
 				DistY= tmpY - tmpRY;
 				Dist = (int) Math.pow(DistX*DistX+DistY*DistY, 0.5);
 				sina = DistY/Dist;
-				cosa = DistX/Dist;
-				
-				
+				cosa = DistX/Dist;				
 				
 				tmpaX= tmpaX + cosa*planets[i].getMass()/(Dist*Dist);
 				tmpaY= tmpaY + sina*planets[i].getMass()/(Dist*Dist);
@@ -145,8 +193,16 @@ public class MainPanel extends JPanel implements Runnable {
 			rocket.setVx(tmpVX);	
 			rocket.setVy(tmpVY);	
 			
+			DataPanel.velocityLabel.setText(" velocity: ["+MainPanel.rocket.getVx()+", "+(-1*MainPanel.rocket.getVy())+"]");
+			
 			this.repaint();
-		
+			//check if ok
+			czynny = checkIfOutOfBounds();
+			if(czynny == true) {
+				for(int i = 0; i<planets.length; i++) {
+					czynny = checkPlanetCollision(planets[i]);
+				}
+			}
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -155,7 +211,108 @@ public class MainPanel extends JPanel implements Runnable {
 		
 		}
 	}
+	boolean checkPlanetCollision(Planet p){//czy rakieta nie walne³a w planete TO NIE DZIA£¥AAA, a spr czy nie odlecia³a dzia³a, wiêc coœ nie tak robie z wyci¹gnieciem wsp. planet, ale serio nwm o co dok³adnie cho	
+			if(pow((pow(rocket.getApex().getX()-p.getXY().getX(), 2)+pow(rocket.getApex().getY()-p.getXY().getY(), 2)), 0.5)<p.radius) {//walne³o
+				if(p != destinationPlanet)
+					winner = false;
+				else {
+					winner = true;
+					MainMenu.money+=50;//nagroda
+					MainMenu.balance.setText(String.valueOf(MainMenu.money)+"$");
+				}
+				return false;
+			}
+			else
+				return true;//can continue
+	}
 	
+	boolean checkIfOutOfBounds() {//czy rakieta nie odlecia³a 		
+		if(rocket.getApex().getX()<0||rocket.getApex().getX()>wid||rocket.getApex().getY()<0||rocket.getApex().getX()>heig) {
+			System.out.println("farewell!");
+			winner = false;
+			return false;
+		}
+		else
+			return true;//can continue
+	}
+
+	void updateDataPanel() {
+		DataPanel.fuelBarWidth = (int)(fuel*DataPanel.w/100);
+		DataPanel.fuelLabel.setText(" fuel supply: "+fuel+"%");
+	}
+	@Override
+	public void keyTyped(KeyEvent e) {}
+	@Override
+	public void keyPressed(KeyEvent e) {}
+	@Override
+	public void keyReleased(KeyEvent e) {
+		int code = e.getKeyCode();
+		if(fuel>0) {
+			if(code == KeyEvent.VK_UP) {
+				up();
+				fuel--;
+				updateDataPanel();
+			}
+			if(code == KeyEvent.VK_DOWN) {
+				down();
+				fuel--;
+				updateDataPanel();
+			}
+			if(code == KeyEvent.VK_LEFT) {
+				left();
+				fuel--;
+				updateDataPanel();
+			}
+			if(code == KeyEvent.VK_RIGHT) {
+				right();
+				fuel--;
+				updateDataPanel();
+			}
+			Point p = new Point((int)(rocket.getApex().getX()+rocket.getVx()), (int)(rocket.getApex().getY()+rocket.getVy()));
+			rocket.setApex(p);
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {}
+	
+	public void up() {
+		vely = -1;
+		double tmpvy = rocket.getVy();
+		//ograniczenie prêdkoœci
+		if(tmpvy+vely>-10)
+			rocket.setVy(tmpvy+vely);
+		else
+			rocket.setVy(-10);
+		
+	}	
+	public void down() {
+		vely = 1;
+		double tmpvy = rocket.getVy();
+	
+		if(tmpvy+vely<10)
+			rocket.setVy(tmpvy+vely);
+		else
+			rocket.setVy(10);
+	}
+	public void left() {
+		velx = -1;			
+		double tmpvx = rocket.getVx();
+		
+		if(tmpvx+velx>-10)
+			rocket.setVx(tmpvx+velx);
+		else			
+			rocket.setVx(-10);	
+	}
+	public void right() {
+		velx += 1;
+		double tmpvx = rocket.getVx();
+	
+		if(tmpvx+velx<10)
+			rocket.setVx(tmpvx+velx);
+		else			
+			rocket.setVx(10);
+	}
 	
 }
 
