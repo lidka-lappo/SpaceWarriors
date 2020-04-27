@@ -50,6 +50,7 @@ public class LetsGo {
 		}	
 	}
 	
+	
 	public static void main(String[] args) throws InterruptedException {
 		ap = new LetsGo().new animationPanel();
 		fr = new JFrame("SPACE WARRIORS, odlotowa przeja¿d¿ka");
