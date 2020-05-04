@@ -28,7 +28,7 @@ public class LetsGo {
 			this.setSize(500, 500);
 			for (int i = 0; i < 6; ++i)
 				try {
-					images[i] = ImageIO.read(new File("src/images/"+ (i+1) + ".jpg"));
+					images[i] = ImageIO.read(new File("src/imagess/"+ (i+1) + ".jpg"));
 				} catch (IOException e) {
 				
 					e.printStackTrace();
