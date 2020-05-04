@@ -4,7 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -27,14 +31,21 @@ public class MainPanel extends JPanel implements Runnable, ActionListener, KeyLi
 	double velx = 0;
 	double vely = 0;
 	Timer t = new Timer(10, this);
-	static int fuel = 100;
+	static int fuel;
 	static int level;
 	boolean winner;
+	///
+	BufferedImage image;// = new BufferedImage(wid, heig, BufferedImage.TYPE_INT_RGB);
+	boolean bye = false;
+	boolean boom = false;
+	boolean win = false;
+	Point centerPoint;
 	
 	public MainPanel(int width, int height, Planet pl[]) {
 		
 		wid = width;
 		heig = height;
+		fuel = 100;
 		mainPanel = new JPanel();
 		mainPanel.setOpaque(true);
 		mainPanel.setLayout(null);
@@ -48,6 +59,7 @@ public class MainPanel extends JPanel implements Runnable, ActionListener, KeyLi
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
 		
+		centerPoint = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
 	}
 
 	static void setRocketColor(Color c) {
@@ -82,16 +94,45 @@ public class MainPanel extends JPanel implements Runnable, ActionListener, KeyLi
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		g.setColor(Color.black);
-		g.fillRect(0, 0, wid, heig);
-		rocket.paintRocket(g);
-		
-		// planetki
-		for (int i = 0; i<9; i++) {
-			planets[i].paintPlanet(g);	
+	
+		if(bye) {
+			try {
+				image = ImageIO.read(new File("src/imagess/bye.jpg"));
+				super.paintComponent(g);
+		        g.drawImage(image, (int)(centerPoint.getX()-(0.5*image.getWidth())), (int)(centerPoint.getY()-(0.5*image.getHeight())), null);
+			} catch (IOException e) {		
+				e.printStackTrace();
+			}
 		}
-
+		else if(boom) {
+			try {
+				image = ImageIO.read(new File("src/imagess/boom.jpg"));
+				super.paintComponent(g);
+		        g.drawImage(image, (int)(centerPoint.getX()-(0.5*image.getWidth())), (int)(centerPoint.getY()-(0.5*image.getHeight())), null);
+			} catch (IOException e) {		
+				e.printStackTrace();
+			}
+		}
+		else if(win) {
+			try {
+				image = ImageIO.read(new File("src/imagess/success.jpg"));
+				super.paintComponent(g);
+		        g.drawImage(image, (int)(centerPoint.getX()-(0.5*image.getWidth())), (int)(centerPoint.getY()-(0.5*image.getHeight())), null);
+			} catch (IOException e) {		
+				e.printStackTrace();
+			}
+		}
+		else {
+			super.paintComponent(g);
+			g.setColor(Color.black);
+			g.fillRect(0, 0, wid, heig);
+			rocket.paintRocket(g);
+		
+			// planetki
+			for (int i = 0; i<9; i++) {
+				planets[i].paintPlanet(g);	
+			}
+		}
 	
 	}
 	
@@ -198,8 +239,9 @@ public class MainPanel extends JPanel implements Runnable, ActionListener, KeyLi
 			this.repaint();
 			//check if ok
 			czynny = checkIfOutOfBounds();
-			if(czynny == true) {
-				for(int i = 0; i<planets.length; i++) {
+			
+			for(int i = 0; i<planets.length; i++) {
+				if(czynny == true) {
 					czynny = checkPlanetCollision(planets[i]);
 				}
 			}
@@ -213,22 +255,39 @@ public class MainPanel extends JPanel implements Runnable, ActionListener, KeyLi
 	}
 	boolean checkPlanetCollision(Planet p){//czy rakieta nie walne³a w planete TO NIE DZIA£¥AAA, a spr czy nie odlecia³a dzia³a, wiêc coœ nie tak robie z wyci¹gnieciem wsp. planet, ale serio nwm o co dok³adnie cho	
 			if(pow((pow(rocket.getApex().getX()-p.getXY().getX(), 2)+pow(rocket.getApex().getY()-p.getXY().getY(), 2)), 0.5)<p.radius) {//walne³o
-				if(p != destinationPlanet)
+				if(p != destinationPlanet) {
 					winner = false;
+					boom = true;
+				}
 				else {
 					winner = true;
 					MainMenu.money+=50;//nagroda
 					MainMenu.balance.setText(String.valueOf(MainMenu.money)+"$");
+					win = true;
 				}
 				return false;
 			}
 			else
 				return true;//can continue
 	}
-	
+	///
+	/*
+	public void paint(Graphics g){
+		super.paintComponent(g);
+        g.drawImage(byeImage, 0, 0, null);
+    }*/
+	///
 	boolean checkIfOutOfBounds() {//czy rakieta nie odlecia³a 		
 		if(rocket.getApex().getX()<0||rocket.getApex().getX()>wid||rocket.getApex().getY()<0||rocket.getApex().getX()>heig) {
 			System.out.println("farewell!");
+			/*
+			try {
+				byeImage = ImageIO.read(new File("src/imagess/bye.jpg"));
+		//		repaint(null);
+			} catch (IOException e) {		
+				e.printStackTrace();
+			}*/
+			bye = true;
 			winner = false;
 			return false;
 		}

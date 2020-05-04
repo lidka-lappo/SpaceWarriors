@@ -147,7 +147,7 @@ public class GameInterface extends JFrame implements ActionListener{
 	        		//end
 	        		MainPanel.czynny = false;//mimo to nadal siê wykonuje po naciœniêciu "end" :/
 	        		frame.dispose();
-	        		MainMenu.frame.setVisible(true);
+	        	//	MainMenu.frame.setVisible(true);
 	            break; 
 	        }
 

@@ -27,7 +27,7 @@ public class ShopFrame extends JFrame  implements ActionListener {
 	int width;
 	int height;
 	///test
-	int money = 100;
+	int money;// = 100;
 	int price = 40;
 	
 	Color newRocketColor;
@@ -37,6 +37,7 @@ public class ShopFrame extends JFrame  implements ActionListener {
 		frame = new JFrame("Space warriors - shop");
         frame.setSize(640, 480);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        money = MainMenu.money;
         width = (int)frame.getSize().getWidth();
         height = (int)frame.getSize().getHeight();
         blackPanel = new JPanel();
@@ -118,6 +119,8 @@ public class ShopFrame extends JFrame  implements ActionListener {
          		{
          			money-=price;
          			MainPanel.setRocketColor(newRocketColor);
+         			MainMenu.money -= price;
+         			MainMenu.balance.setText(String.valueOf(MainMenu.money)+"$");
          		}
             	 else {
             		 buyButton.setBackground(Color.red);
