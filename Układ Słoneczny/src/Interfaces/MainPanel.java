@@ -53,7 +53,7 @@ public class MainPanel extends JPanel implements Runnable, ActionListener, KeyLi
 		
 		planets = pl.clone();
 		rocket = new Rocket(new Point(500,300),  rocketColor);
-		////////na razie tu, potem jakoœ w w¹tku
+		
 		t.restart();
 		addKeyListener(this);
 		setFocusable(true);

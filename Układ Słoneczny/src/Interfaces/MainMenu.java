@@ -49,8 +49,7 @@ public class MainMenu extends JFrame implements ActionListener {
     public MainMenu() throws HeadlessException {
         frame = new JFrame();
         frame.setSize(640, 480);
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panelTop = new JPanel(new FlowLayout());
         panelTop.setBackground(Color.black);
         chooseLevel = new JLabel("Choose Level");

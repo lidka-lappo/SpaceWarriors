@@ -4,33 +4,27 @@ package Interfaces;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-//import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-//import javax.swing.JLabel;
-//import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import java.awt.event.WindowAdapter;
 
-//import static java.util.concurrent.TimeUnit.*;
 
 
-public class GameInterface extends JFrame implements ActionListener{
+public class GameInterface extends JFrame implements ActionListener/*, WindowListener*/{
 	JFrame frame;
 	
 	JButton startButton;
 	JButton endButton;
-	 /*
-	JPanel dataPanel;
-	JLabel velocityLabel;
-	JLabel fuelLabel;*/
 
 	static DataPanel dPanel;
 	
@@ -46,6 +40,12 @@ public class GameInterface extends JFrame implements ActionListener{
 		
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		frame.addWindowListener( new WindowAdapter()
+		{
+			public void windowClosed(WindowEvent e) {
+				MainPanel.czynny = false;
+			}
+		});
 		frame.setLayout(null);
 		frame.setLayout(null);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -66,7 +66,7 @@ public class GameInterface extends JFrame implements ActionListener{
 	     double a[] = new double[] {0, 90, 90, 90, 90, 90, 90, 90, 90};
 	     double aV[] = new double[] {0, 0.09, 0.07, 0.06, 0.05, 0.04, 0.03, 0.02, 0.01};
 	     Color col[] = new Color[] {Color.red, Color.gray, Color.orange, Color.blue, Color.red, Color.yellow, Color.orange, Color.blue, Color.lightGray};
-	     int m[] = new int[] {1000, 10, 10, 10, 10, 10, 10 ,10 ,10};//trzeba jakos sprytnie przeliczyc, Â¿eby nie walnac w slonce od razu 
+	     int m[] = new int[] {1000, 10, 20, 20, 10, 50, 45 ,25 ,30};//trzeba jakos sprytnie przeliczyc, Â¿eby nie walnac w slonce od razu 
 	     String nam[] = new String[] {"SUN", "MERCURY", "VENUS", "EARTH", "MARS", "JUPITER", "SATURN", "URANUS", "NEPTUNE"};
 	 	 
 	     Point xxyy[]= new Point[nam.length];
@@ -101,19 +101,6 @@ public class GameInterface extends JFrame implements ActionListener{
 		endButton.setBounds(width-100, height-120, 70, 70);
 		mainPanel.add(endButton);
 		
-		//data	
-		/*
-		dataPanel = new JPanel();
-		dataPanel.setBackground(Color.white);		
-		dataPanel.setBounds(0, height - height/3, width/4, height/3);
-		dataPanel.setLayout(new GridLayout(3,1));		
-		velocityLabel = new JLabel(" velocity: ");//+v
-		dataPanel.add(velocityLabel);
-		fuelLabel = new JLabel(" fuel supply: ");//+fuel
-		dataPanel.add(fuelLabel);
-		//dataPanel.add(new JLabel("wykres paliwka"));
-		mainPanel.add(dataPanel);
-	*/	
 		dPanel = new DataPanel();
 		mainPanel.add(dPanel);
 		
@@ -145,16 +132,14 @@ public class GameInterface extends JFrame implements ActionListener{
 	            break;
 	        	case 2:
 	        		//end
-	        		MainPanel.czynny = false;//mimo to nadal siê wykonuje po naciœniêciu "end" :/
+	        		MainPanel.czynny = false;
 	        		frame.dispose();
-	        	//	MainMenu.frame.setVisible(true);
 	            break; 
 	        }
 
 	    }
 	
 	public static void main(String[] args) throws InterruptedException {
-		//		GameInterface newGame = new GameInterface();
 		MainMenu.newGame = new GameInterface();
 				/*
 		SwingUtilities.invokeLater(new Runnable() {
