@@ -16,25 +16,28 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class ShopFrame extends JFrame  implements ActionListener {
-	JFrame frame;
-	JPanel blackPanel;
-	JPanel whitePanel;
-	JLabel shopLabel;
-	JLabel moneyLabel; 
-	JButton colorButton;
-	JButton buyButton;
-	JButton backButton;
-	int width;
-	int height;
-	///test
-	int money;// = 100;
-	int price = 40;
-	
-	Color newRocketColor;
-	
-	private static final long serialVersionUID = 1L;
-	public ShopFrame() throws HeadlessException {
-		frame = new JFrame("Space warriors - shop");
+    JFrame frame;
+    JPanel blackPanel;
+    JPanel whitePanel;
+    JLabel shopLabel;
+    JLabel moneyLabel; 
+    JButton colorButton;
+    JButton buyButton;
+    JButton backButton;
+    int width;
+    int height;
+    ///test
+    int money;// = 100;
+    int price = 40;
+    
+    Color newRocketColor;
+    //lang
+    String poorStatement;
+    String colorChooserTitle;
+    
+    private static final long serialVersionUID = 1L;
+    public ShopFrame() throws HeadlessException {
+        frame = new JFrame(/*"Space warriors - shop"*/);//lang
         frame.setSize(640, 480);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         money = MainMenu.money;
@@ -61,7 +64,7 @@ public class ShopFrame extends JFrame  implements ActionListener {
         whitePanel.setLayout(new GridLayout(3,1));
         moneyLabel = new JLabel();
         moneyLabel.setFont(new Font("Ariel", Font.BOLD, 20));
-        moneyLabel.setText("\t \t you've got "+money+"$, new rocket costs "+price+"$");
+     //   moneyLabel.setText("\t \t you've got "+money+"$, new rocket costs "+price+"$");//lang
         whitePanel.add(moneyLabel);
         
         JPanel panel2 = new JPanel();
@@ -92,7 +95,7 @@ public class ShopFrame extends JFrame  implements ActionListener {
             
         blackPanel.add(whitePanel);
         backButton = new JButton("back");
-        backButton.setBackground(Color.red);	
+        backButton.setBackground(Color.red);    
         backButton.addActionListener(this);
         backButton.setActionCommand("2");
         backButton.setBounds((int)(width*0.1 + whitePanelWidth), height-70, (int)(width - (width*0.1 + whitePanelWidth+15)), 30);
@@ -101,44 +104,44 @@ public class ShopFrame extends JFrame  implements ActionListener {
         blackPanel.add(backButton);
                
         frame.setVisible(true);
-	}
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
         String choice = arg0.getActionCommand();
         switch (choice) {
-        	case "color":
-        		newRocketColor = JColorChooser.showDialog(null, "Wybor koloru", Color.GREEN);
-        		if(money>=price)
-        			buyButton.setBackground(newRocketColor);
-        		else
-        			buyButton.setBackground(Color.red);
+            case "color":
+                newRocketColor = JColorChooser.showDialog(null, colorChooserTitle/*"Wybor koloru"*/, Color.GREEN);//lang
+                if(money>=price)
+                    buyButton.setBackground(newRocketColor);
+                else
+                    buyButton.setBackground(Color.red);
             break;
              case "buy":
-            	 if(money>=price)
-         		{
-         			money-=price;
-         			MainPanel.setRocketColor(newRocketColor);
-         			MainMenu.money -= price;
-         			MainMenu.balance.setText(String.valueOf(MainMenu.money)+"$");
-         		}
-            	 else {
-            		 buyButton.setBackground(Color.red);
-            		 JOptionPane.showMessageDialog(null, "sorry, you are too poor :(", "error", JOptionPane.ERROR_MESSAGE);
-            	 }
-            	 System.out.println(money);
+                 if(money>=price)
+                {
+                    money-=price;
+                    MainPanel.setRocketColor(newRocketColor);
+                    MainMenu.money -= price;
+                    MainMenu.balance.setText(String.valueOf(MainMenu.money)+"$");
+                }
+                 else {
+                     buyButton.setBackground(Color.red);
+                     JOptionPane.showMessageDialog(null, poorStatement/*"sorry, you are too poor :("*/, "error", JOptionPane.ERROR_MESSAGE);//lang
+                 }
+                 System.out.println(money);
                 break;
              case "back":
-         		frame.setVisible(false);//znika
+                frame.setVisible(false);//znika
                 new MainMenu();
              break;
             
         }
 
     }
-	/*public static void main(String[] args) {
-		new ShopFrame();
+    /*public static void main(String[] args) {
+        new ShopFrame();
 
-	}*/
+    }*/
 
 }

@@ -75,7 +75,7 @@ public class Rocket {
 		 g.setColor(getColor());
 		 g2d.fill(circle);*/
 		
-		Graphics2D g2d = (Graphics2D) g; //Rysowanie trójąta, dla mechaniki na razie rakieto to koło
+		Graphics2D g2d = (Graphics2D) g; //Rysowanie trĂłjÄ…ta, dla mechaniki na razie rakieto to koĹ‚o
 		
 		 int x[]= new int[] {(int) getApex().getX(), (int) getApex().getX() -5 , (int) getApex().getX()+5};
 		 int y[]= new int[] {(int) getApex().getY(), (int) getApex().getY()-10, (int) getApex().getY()-10};

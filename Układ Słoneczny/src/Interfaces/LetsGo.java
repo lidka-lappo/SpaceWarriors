@@ -53,7 +53,7 @@ public class LetsGo {
 	
 	public static void main(String[] args) throws InterruptedException {
 		ap = new LetsGo().new animationPanel();
-		fr = new JFrame("SPACE WARRIORS, odlotowa przeja¿d¿ka");
+		fr = new JFrame("SPACE WARRIORS, odlotowa przejaÅ¼dÅ¼ka");
 	    fr.add(ap, BorderLayout.CENTER);
 	    fr.setSize(500,500);	    
 	    fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
@@ -66,7 +66,7 @@ public class LetsGo {
             	scheduler.shutdownNow();
             	mainMenu = new MainMenu();
             	//fr.dispose();	
-            	fr.setVisible(false);//nwm kurcze jak zamkn¹æ to okno, dispose() nie dzia³a            	
+            	fr.setVisible(false);//nwm kurcze jak zamknÄ…Ä‡ to okno, dispose() nie dziaÅ‚a            	
             	}
         }, 3, SECONDS);
 	    

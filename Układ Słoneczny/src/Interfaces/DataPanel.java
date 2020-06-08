@@ -20,6 +20,7 @@ public class DataPanel extends JPanel {
 	static int w;
 	private static final long serialVersionUID = 1L;
 
+
 	public DataPanel() {
 		
 		this.setBackground(Color.white);		
@@ -28,10 +29,12 @@ public class DataPanel extends JPanel {
 		panelHeight = this.getHeight();
 		w = (int)(0.8*panelWidth);
 		fuelBarWidth = (int)(0.8*panelWidth);
-		this.setLayout(new GridLayout(3,1));		
-		velocityLabel = new JLabel(" velocity: ["+MainPanel.rocket.getVx()+", "+MainPanel.rocket.getVy()+"]");
+		this.setLayout(new GridLayout(3,1));
+		velocityLabel = new JLabel();
+		//velocityLabel = new JLabel(/*velocity+": */"["+MainPanel.rocket.getVx()+", "+MainPanel.rocket.getVy()+"]");//lang
 		this.add(velocityLabel);
-		fuelLabel = new JLabel(" fuel supply: "+MainPanel.fuel+"%");
+		fuelLabel = new JLabel();
+		//fuelLabel = new JLabel(/*" fuel supply*/": "+MainPanel.fuel+"%");//lang
 		this.add(fuelLabel);
 	}
 

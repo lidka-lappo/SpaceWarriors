@@ -10,12 +10,16 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+
+
 import java.awt.event.WindowAdapter;
 
 
@@ -26,7 +30,7 @@ public class GameInterface extends JFrame implements ActionListener/*, WindowLis
 	JButton startButton;
 	JButton endButton;
 
-	static DataPanel dPanel;
+	public DataPanel dPanel;
 	
 	String title = "SPACE WARRIORS, odlotowa przejazdzka";
 	static int width;
@@ -35,6 +39,11 @@ public class GameInterface extends JFrame implements ActionListener/*, WindowLis
 	public MainPanel mainPanel;
 	static ExecutorService exec;
 	
+	///lang
+	String nam[];
+	static String velocity;
+	static String fuelStr;
+	 
 	private static final long serialVersionUID = 1L;
 	public  GameInterface() throws HeadlessException {
 		
@@ -56,7 +65,7 @@ public class GameInterface extends JFrame implements ActionListener/*, WindowLis
 		width = (int)screenSize.getWidth();
 		height = (int)screenSize.getHeight();	
        
-		//planetki, ewentualne TO DO opracować wczytywaie z pliku
+		//planetki, ewentualne TO DO opracowaÄ‡ wczytywaie z pliku
 		 int sunX = width/2;
 		 int sunY = height/2;
 		 
@@ -66,11 +75,18 @@ public class GameInterface extends JFrame implements ActionListener/*, WindowLis
 	     double a[] = new double[] {0, 90, 90, 90, 90, 90, 90, 90, 90};
 	     double aV[] = new double[] {0, 0.09, 0.07, 0.06, 0.05, 0.04, 0.03, 0.02, 0.01};
 	     Color col[] = new Color[] {Color.red, Color.gray, Color.orange, Color.blue, Color.red, Color.yellow, Color.orange, Color.blue, Color.lightGray};
-	     int m[] = new int[] {1000, 10, 20, 20, 10, 50, 45 ,25 ,30};//trzeba jakos sprytnie przeliczyc, ¿eby nie walnac w slonce od razu 
-	     String nam[] = new String[] {"SUN", "MERCURY", "VENUS", "EARTH", "MARS", "JUPITER", "SATURN", "URANUS", "NEPTUNE"};
+	     int m[] = new int[] {1000, 10, 20, 20, 10, 50, 45 ,25 ,30};//trzeba jakos sprytnie przeliczyc, Âżeby nie walnac w slonce od razu 
+	   ///lang 
+	     if(MainMenu.locale == null) {
+	    	 MainMenu.locale = new Locale(MainMenu.language, MainMenu.country);
+	    	 MainMenu.r = ResourceBundle.getBundle("Bundle", MainMenu.locale);
+	    	}
+	     nam = new String[] {MainMenu.r.getString("sun"),MainMenu.r.getString("mer"),MainMenu.r.getString("ven"),MainMenu.r.getString("ear"),MainMenu.r.getString("mar"),MainMenu.r.getString("jup"),MainMenu.r.getString("sat"),MainMenu.r.getString("ura"),MainMenu.r.getString("nep")};
+	    ///* String nam[]*/nam = new String[] {"SUN", "MERCURY", "VENUS", "EARTH", "MARS", "JUPITER", "SATURN", "URANUS", "NEPTUNE"}; //lang
 	 	 
 	     Point xxyy[]= new Point[nam.length];
-	     planets = new Planet[nam.length];
+	  	 planets = new Planet[nam.length]; 
+	  
 	     for (int i = 0; i<nam.length; i++)
 	     {
 	    	xxyy[i]=new Point(sunX+dist[i], sunY);
@@ -78,6 +94,7 @@ public class GameInterface extends JFrame implements ActionListener/*, WindowLis
 	       	planets[i].info();
 	     }
 		  
+
 	     
 		 mainPanel = new MainPanel(650, 650, planets);
 		 mainPanel.setBackground(Color.black);
@@ -98,10 +115,14 @@ public class GameInterface extends JFrame implements ActionListener/*, WindowLis
 		endButton.setBackground(Color.red);	
 		endButton.addActionListener(this);
 		endButton.setActionCommand("2");
-		endButton.setBounds(width-100, height-120, 70, 70);
+		endButton.setBounds(width-100, height-120, 100, 70);
 		mainPanel.add(endButton);
 		
 		dPanel = new DataPanel();
+		///lang
+		DataPanel.velocityLabel.setText("[0,0]");
+		DataPanel.fuelLabel.setText("100%");
+		
 		mainPanel.add(dPanel);
 		
 		frame.add(mainPanel);
@@ -131,7 +152,8 @@ public class GameInterface extends JFrame implements ActionListener/*, WindowLis
 	       
 	            break;
 	        	case 2:
-	        		//end
+	
+	        			
 	        		MainPanel.czynny = false;
 	        		frame.dispose();
 	            break; 
@@ -140,18 +162,14 @@ public class GameInterface extends JFrame implements ActionListener/*, WindowLis
 	    }
 	
 	public static void main(String[] args) throws InterruptedException {
-		MainMenu.newGame = new GameInterface();
-				/*
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			public void run() {		
-									
-				exec = Executors.newFixedThreadPool(1);
-				exec.execute(newGame.mainPanel);
-				exec.shutdown();				
-			
-			}
-		});*/
+		SwingUtilities.invokeLater(
+				new Runnable(){
+					public void run() {
+						MainMenu.newGame = new GameInterface();
+					}
+			});
+		
+		
 	}
 	
 }

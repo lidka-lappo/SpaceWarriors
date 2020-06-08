@@ -1,9 +1,11 @@
 package Interfaces;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
@@ -13,16 +15,25 @@ import javax.swing.JButton;
 public class CircleButton extends JButton{
 
 	Color fillColor;
-	
+	Color circuitColor;
+	int diametr;
 	private static final long serialVersionUID = 1L;
 	boolean mouseOver = false;
 	boolean mousePressed = false;
-	public CircleButton(String text, Color clr){
+	static boolean ifChosen = false;
+	static boolean ifOpen = false;
+	public CircleButton(String text, Color clrf, int d, boolean open){
 		super(text);
 		setOpaque(false);
 		setFocusPainted(false);
 		setBorderPainted(false);
-		fillColor =clr;
+		diametr =d;
+		fillColor =clrf;
+		ifOpen = open;
+		if(ifOpen)
+			circuitColor = Color.green;
+		else
+			circuitColor = Color.red;
 		MouseAdapter mouseListener = new MouseAdapter(){
 
 			public void mousePressed(MouseEvent me){
@@ -53,49 +64,52 @@ public class CircleButton extends JButton{
 		addMouseMotionListener(mouseListener);		
 	}
 	
-	private int getDiameter(){
-		int diameter = Math.min(getWidth(), getHeight());
-		return diameter;
+	private int getDiametr(){
+		return diametr;
 	}
 
 	public Dimension getPreferredSize(){
 		FontMetrics metrics = getGraphics().getFontMetrics(getFont());
-		int minDiameter = 10 + Math.max(metrics.stringWidth(getText()), metrics.getHeight());
+		int minDiameter = 10 + Math.max(metrics.stringWidth(getText()), diametr);
 		return new Dimension(minDiameter, minDiameter);
 	}
 	
 	public boolean contains(int x, int y){
-		int radius = getDiameter()/2;
+		int radius = getDiametr()/2;
 		return Point2D.distance(x, y, getWidth()/2, getHeight()/2) < radius;
 	}
 	
 public void paintComponent(Graphics g){
 		
-		int diameter = getDiameter();
+		int diameter = getDiametr();
 		int radius = diameter/2;
 		
 		if(mousePressed){
-			g.setColor(Color.LIGHT_GRAY);
-		}
+			g.setColor(fillColor.darker());
+			if(circuitColor == Color.blue)
+				circuitColor = Color.green;
+			else if (circuitColor == Color.red)
+				g.setColor(Color.red);
+			else
+				circuitColor = Color.blue;
+			
+			}
 		else{
 			g.setColor(fillColor);
 		}
 		g.fillOval(getWidth()/2 - radius, getHeight()/2 - radius, diameter, diameter);
+		g.setColor(circuitColor);
+		BasicStroke bs1 = new BasicStroke(2);
+		((Graphics2D) g).setStroke(bs1);
 		
-		if(mouseOver){
-			g.setColor(Color.red);
-		}
-		else{
-			g.setColor(Color.BLACK);
-		}
 		g.drawOval(getWidth()/2 - radius, getHeight()/2 - radius, diameter, diameter);
-		
-		g.setColor(Color.BLACK);
+		g.setColor(Color.white);
 		g.setFont(getFont());
 		FontMetrics metrics = g.getFontMetrics(getFont());
 		int stringWidth = metrics.stringWidth(getText());
 		int stringHeight = metrics.getHeight();
-		g.drawString(getText(), getWidth()/2 - stringWidth/2, getHeight()/2 + stringHeight/4);
+		g.drawString(getText(), getWidth()/2 - stringWidth/2, getHeight()/2 + stringHeight/4 - diametr/2-5);
 	}
 }
+
 

@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 
-public class Planet { //no i słoneczko:)
+public class Planet { //no i sĹ‚oneczko:)
 	Font f = new Font("Arial", 1, 15);
 	int radius;
 	Point center;
@@ -94,12 +94,16 @@ public class Planet { //no i słoneczko:)
 		 Ellipse2D circle = new Ellipse2D.Double(getXY().getX()-getR(), getXY().getY()-getR(), 2*getR(), 2*getR());
 		 g.setColor(getColor());
 		 g2d.fill(circle);
-		 if (getName()=="SUN") {
+		 ///lang
+		// if (getName()=="SUN") {
+		 if (getName()==MainMenu.r.getString("sun")) {
 				g.setColor(Color.yellow);
 				g2d.setStroke(new BasicStroke(20));
 				g2d.draw(circle);
 		 }
-		 if (getName()=="SATURN") {
+		 //lang
+		// if (getName()=="SATURN") {
+		 if (getName()==MainMenu.r.getString("sat")) {
 				g.setColor(Color.white);
 				g2d.setStroke(new BasicStroke(2));
 				g2d.drawLine((int)getXY().getX()-getR(), (int)getXY().getY()-getR(), (int)getXY().getX()+getR(), (int)getXY().getY()+getR());
