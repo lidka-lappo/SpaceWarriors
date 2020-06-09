@@ -30,16 +30,15 @@ public class DataPanel extends JPanel {
 		w = (int)(0.8*panelWidth);
 		fuelBarWidth = (int)(0.8*panelWidth);
 		this.setLayout(new GridLayout(3,1));
-		velocityLabel = new JLabel();
-		//velocityLabel = new JLabel(/*velocity+": */"["+MainPanel.rocket.getVx()+", "+MainPanel.rocket.getVy()+"]");//lang
+		velocityLabel = new JLabel();	
 		this.add(velocityLabel);
 		fuelLabel = new JLabel();
-		//fuelLabel = new JLabel(/*" fuel supply*/": "+MainPanel.fuel+"%");//lang
 		this.add(fuelLabel);
 	}
 
 	public void paintComponent(Graphics g) {
-		super.paintComponent(g);		
+		super.paintComponent(g);
+		//fuel bar
 		g.setColor(Color.RED);
 		g.fillRect(20, (int)(panelHeight*0.6), fuelBarWidth, 20);
 		g.setColor(Color.BLACK);

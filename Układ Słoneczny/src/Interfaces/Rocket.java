@@ -21,7 +21,7 @@ public class Rocket {
 	public Rocket(Point a,  Color col) {
 		color = col;
 		apex =a;
-		Vx=0; //nazwy do poprawy kiedys tam
+		Vx=0; 
 		Vy=0;
 	}
 	
@@ -70,12 +70,7 @@ public class Rocket {
 	
 	
 	void paintRocket(Graphics g) {
-		/* Graphics2D g2d = (Graphics2D) g;
-		 Ellipse2D circle = new Ellipse2D.Double(getApex().getX(), getApex().getY(), 20, 20);
-		 g.setColor(getColor());
-		 g2d.fill(circle);*/
-		
-		Graphics2D g2d = (Graphics2D) g; //Rysowanie trĂłjÄ…ta, dla mechaniki na razie rakieto to koĹ‚o
+		Graphics2D g2d = (Graphics2D) g; 
 		
 		 int x[]= new int[] {(int) getApex().getX(), (int) getApex().getX() -5 , (int) getApex().getX()+5};
 		 int y[]= new int[] {(int) getApex().getY(), (int) getApex().getY()-10, (int) getApex().getY()-10};

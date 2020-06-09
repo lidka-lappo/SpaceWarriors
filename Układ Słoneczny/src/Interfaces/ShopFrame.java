@@ -26,18 +26,18 @@ public class ShopFrame extends JFrame  implements ActionListener {
     JButton backButton;
     int width;
     int height;
-    ///test
-    int money;// = 100;
+
+    int money;
     int price = 40;
     
     Color newRocketColor;
-    //lang
+
     String poorStatement;
     String colorChooserTitle;
     
     private static final long serialVersionUID = 1L;
     public ShopFrame() throws HeadlessException {
-        frame = new JFrame(/*"Space warriors - shop"*/);//lang
+        frame = new JFrame();
         frame.setSize(640, 480);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         money = MainMenu.money;
@@ -50,7 +50,6 @@ public class ShopFrame extends JFrame  implements ActionListener {
         frame.add(blackPanel, BorderLayout.CENTER);
         shopLabel = new JLabel();
         shopLabel.setForeground(Color.orange);
-       // Font f = new Font("Ariel", Font.BOLD, 30);
         shopLabel.setFont(new Font("Ariel", Font.BOLD, 30));
         shopLabel.setText("SHOP");
         shopLabel.setBounds((int)(width*0.43), 5, 100, 100);
@@ -64,7 +63,6 @@ public class ShopFrame extends JFrame  implements ActionListener {
         whitePanel.setLayout(new GridLayout(3,1));
         moneyLabel = new JLabel();
         moneyLabel.setFont(new Font("Ariel", Font.BOLD, 20));
-     //   moneyLabel.setText("\t \t you've got "+money+"$, new rocket costs "+price+"$");//lang
         whitePanel.add(moneyLabel);
         
         JPanel panel2 = new JPanel();
@@ -110,13 +108,15 @@ public class ShopFrame extends JFrame  implements ActionListener {
     public void actionPerformed(ActionEvent arg0) {
         String choice = arg0.getActionCommand();
         switch (choice) {
+        //choose color
             case "color":
-                newRocketColor = JColorChooser.showDialog(null, colorChooserTitle/*"Wybor koloru"*/, Color.GREEN);//lang
+                newRocketColor = JColorChooser.showDialog(null, colorChooserTitle, Color.GREEN);
                 if(money>=price)
                     buyButton.setBackground(newRocketColor);
                 else
                     buyButton.setBackground(Color.red);
             break;
+         //change rocket color if enough money
              case "buy":
                  if(money>=price)
                 {
@@ -125,23 +125,18 @@ public class ShopFrame extends JFrame  implements ActionListener {
                     MainMenu.money -= price;
                     MainMenu.balance.setText(String.valueOf(MainMenu.money)+"$");
                 }
-                 else {
+                 else {//inform if there's to little money
                      buyButton.setBackground(Color.red);
-                     JOptionPane.showMessageDialog(null, poorStatement/*"sorry, you are too poor :("*/, "error", JOptionPane.ERROR_MESSAGE);//lang
+                     JOptionPane.showMessageDialog(null, poorStatement, "error", JOptionPane.ERROR_MESSAGE);
                  }
                  System.out.println(money);
                 break;
              case "back":
-                frame.setVisible(false);//znika
-                new MainMenu();
+                frame.dispose();
              break;
             
         }
 
     }
-    /*public static void main(String[] args) {
-        new ShopFrame();
-
-    }*/
 
 }

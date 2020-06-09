@@ -65,8 +65,7 @@ public class LetsGo {
 			public void run() { 
             	scheduler.shutdownNow();
             	mainMenu = new MainMenu();
-            	//fr.dispose();	
-            	fr.setVisible(false);//nwm kurcze jak zamknąć to okno, dispose() nie działa            	
+            	fr.dispose();	       	
             	}
         }, 3, SECONDS);
 	    

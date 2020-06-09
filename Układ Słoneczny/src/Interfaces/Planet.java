@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 
-public class Planet { //no i sĹ‚oneczko:)
+public class Planet { //+sun
 	Font f = new Font("Arial", 1, 15);
 	int radius;
 	Point center;
@@ -32,7 +32,7 @@ public class Planet { //no i sĹ‚oneczko:)
 	void info ()
 	{
 		System.out.println(name);
-		System.out.println("r = "+ radius + ", color" + color + ", mass = " + mass +", location: "+center.getX() + ","+center.getY());
+		System.out.println("r = "+ radius + ", color" + color + ", mass = " + mass +", location: "+center.getX() + ","+center.getY()+", angle = "+angle);
 	}
 	int getR ()
 	{
@@ -94,28 +94,25 @@ public class Planet { //no i sĹ‚oneczko:)
 		 Ellipse2D circle = new Ellipse2D.Double(getXY().getX()-getR(), getXY().getY()-getR(), 2*getR(), 2*getR());
 		 g.setColor(getColor());
 		 g2d.fill(circle);
-		 ///lang
-		// if (getName()=="SUN") {
+
 		 if (getName()==MainMenu.r.getString("sun")) {
 				g.setColor(Color.yellow);
 				g2d.setStroke(new BasicStroke(20));
 				g2d.draw(circle);
 		 }
-		 //lang
-		// if (getName()=="SATURN") {
+
 		 if (getName()==MainMenu.r.getString("sat")) {
 				g.setColor(Color.white);
 				g2d.setStroke(new BasicStroke(2));
 				g2d.drawLine((int)getXY().getX()-getR(), (int)getXY().getY()-getR(), (int)getXY().getX()+getR(), (int)getXY().getY()+getR());
 		 }
-		 ///oznaczenie docelowej planety
+		 //destination planet marked
 		 if(this == MainPanel.destinationPlanet) {
 			 g.setColor(Color.white);
 			 g2d.setStroke(new BasicStroke(2));			 
 			 g2d.draw(circle);
 		 }
-			 	
-			
+
 			g.setColor(Color.green);
 			
 			g.setFont(f);

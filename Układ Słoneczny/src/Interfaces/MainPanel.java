@@ -1,266 +1,349 @@
 package Interfaces;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.HeadlessException;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+
+import static java.lang.Math.*;
 
 
-public class MainMenu extends JFrame implements ActionListener {
-
-    static JFrame frame;
-
-    JPanel panelTop;
-    JPanel panelBottom;
-    static JPanel panelCenter;
-
-    JButton shopButton;
-    JButton newGameButton;
-    
-    static JLabel balance;
-    JLabel chooseLevel;
-    JLabel shop;
-
-    CircleButton[] planet;
-    static int money = 0;
-    
-    JMenu menu;
-    JMenuItem i1, i2, i3;
-    
-    static GameInterface newGame;
-    int lvl = 1;
-    static int openLevels = 4;
-    boolean ifOpen[];
-    ///lang
-    ShopFrame shopfr;
-    static String language = "en";
-	static String country = "EN";
-	static Locale locale = null;
-	static ResourceBundle r = null;
-
-	String nam[];
-	Color col[];
-	int rr[];
-	int dist[];
-	
+public class MainPanel extends JPanel implements Runnable, ActionListener, KeyListener {
     private static final long serialVersionUID = 1L;
-
-    public MainMenu() throws HeadlessException {
-    	
-        frame = new JFrame();
-        frame.setSize(640, 480);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        panelTop = new JPanel(new FlowLayout());
-        panelTop.setBackground(Color.black);
-        chooseLevel = new JLabel("Choose Level");
-        chooseLevel.setForeground(Color.white);
-        panelTop.add(chooseLevel);
-        frame.add(panelTop, BorderLayout.PAGE_START);
-
-        panelBottom = new JPanel();
-        panelBottom.setLayout(new GridLayout(1,3));
-        balance = new JLabel("Balance: ");
-        balance.setText(String.valueOf(money)+"$");
-        panelBottom.add(balance);
-       
-        newGameButton = new JButton("New Game");
-        newGameButton.setBackground(Color.green);
-        newGameButton.addActionListener(this);
-        newGameButton.setActionCommand("1");      
-        panelBottom.add(newGameButton);
-
-        shopButton = new JButton("Shop");
-        newGameButton.setBackground(Color.yellow);
-        shopButton.addActionListener(this);
-        shopButton.setActionCommand("2");
-        panelBottom.add(shopButton);
-
-        frame.add(panelBottom, BorderLayout.PAGE_END);
-        
-        
     
-
-        nam = new String[] {"SUN", "MERCURY", "VENUS", "EARTH", "MARS", "JUPITER", "SATURN", "URANUS", "NEPTUNE"};
-        col = new Color[] {Color.red, Color.gray, Color.orange, Color.blue.darker(), Color.red.darker(), Color.yellow, Color.orange, Color.blue, Color.lightGray};
-        rr = new int[] {40, 8, 12, 12, 8, 40, 40, 24, 24};
-        dist = new int[] {0, 70, 90, 110, 130, 160, 210, 240, 300};
-        ifOpen = new boolean[] {false, false, false, false, false, false, false, false, false};
-        panelCenter = new JPanel();
-        panelCenter.setBackground(Color.black);
-        panelCenter.setLayout(null);
-        planet = new CircleButton[9];
-        setUpPlanets();
-
-        frame.add(panelCenter, BorderLayout.CENTER);
-        
-        JMenuBar menuBar=new JMenuBar();  
-        
-        //lang
-        menu=new JMenu("Language");
-        i1=new JMenuItem("Polish"); 
-        i2=new JMenuItem("English");  
-
-        
-        menu.add(i1);
-        i1.setActionCommand("3");
-        i1.addActionListener(this);
-        i1.setSelected(true);
-        ///lang
-        Image img = new ImageIcon("src/imagess/pol.jpg").getImage();
-        i1.setIcon(new ImageIcon(img.getScaledInstance(15, 10, java.awt.Image.SCALE_SMOOTH)));
-        
-        menu.add(i2);         
-        i2.setActionCommand("4");
-        i2.addActionListener(this);
-        i2.setSelected(true);
-      ///lang
-        Image img2 = new ImageIcon("src/imagess/ang.jpg").getImage();
-        i2.setIcon(new ImageIcon(img2.getScaledInstance(15, 10, java.awt.Image.SCALE_SMOOTH)));
-
-        menuBar.add(menu);
-        frame.setJMenuBar(menuBar);
-        frame.setVisible(true);
-    }
+    JPanel mainPanel;   
+    Planet planets[];
+    static Planet destinationPlanet;
+    int wid;
+    int heig;
+    public static boolean czynny =true;
+    static Rocket rocket;
+    static Color rocketColor= Color.blue;
+  
+    double velx = 0;
+    double vely = 0;
+    Timer t = new Timer(10, this);
+    static int fuel;
+    static int level;
+    boolean winner;
    
- ///////////lang   
-    public void changeMenuLanguage(String lang, String count) {
-    	locale = new Locale(lang, count);
-		r = ResourceBundle.getBundle("Bundle", locale);
-		newGameButton.setText(r.getString("new_game"));
-		shopButton.setText(r.getString("shop"));
-		chooseLevel.setText(r.getString("choose_level"));
-		i1.setText(r.getString("polish"));
-		i2.setText(r.getString("english"));
-		menu.setText(r.getString("language"));
-		planet[0].setText(r.getString("sun"));
-		planet[1].setText(r.getString("mer"));
-		planet[2].setText(r.getString("ven"));
-		planet[3].setText(r.getString("ear"));
-		planet[4].setText(r.getString("mar"));
-		planet[5].setText(r.getString("jup"));
-		planet[6].setText(r.getString("sat"));
-		planet[7].setText(r.getString("ura"));
-		planet[8].setText(r.getString("nep"));
-		
-    }
-    public void changeGameIntLanguage(GameInterface gi) {
-    	if(locale == null) {
-    		locale = new Locale(language, country);
-    		r = ResourceBundle.getBundle("Bundle", locale);
-    	}
-		gi.endButton.setText(r.getString("end"));
-		gi.startButton.setText(r.getString("start"));
-		GameInterface.velocity = r.getString("velocity");
-		GameInterface.fuelStr = r.getString("fuel");
-    }
-    public void changeShopLanguage(ShopFrame sf) {
-    	if(locale == null) {
-    		locale = new Locale(language, country);
-    		r = ResourceBundle.getBundle("Bundle", locale);
-    	}
-    	sf.frame.setTitle(r.getString("shop_title"));
-    	sf.shopLabel.setText(r.getString("SHOP"));
-    	sf.moneyLabel.setText("\t \t "+r.getString("you_ve_got")+" "+sf.money+"$, "+r.getString("new_rocket_costs")+" "+sf.price+"$");
-    	sf.colorButton.setText(r.getString("choose_color"));
-    	sf.buyButton.setText(r.getString("BUY"));
-    	sf.backButton.setText(r.getString("back"));
-    	sf.poorStatement = r.getString("poor");
-    	sf.colorChooserTitle = r.getString("colorChooserTitle");
-    }
+    BufferedImage image;
+    boolean bye = false;
+    boolean boom = false;
+    boolean win = false;
+    Point centerPoint;
 
-
-    public void actionPerformed(ActionEvent arg0) {
-        int choice = Integer.parseInt(arg0.getActionCommand());
-        switch (choice) {
-        	case 1:
-            	newGame = new GameInterface();  
-            	changeGameIntLanguage(newGame);
-        		System.out.println("0");
-        		newGame.mainPanel.setLevel(lvl); 
-        		newGame.mainPanel.setDestinationPlanet();
-            break;
-             case 2:  
-               shopfr = new ShopFrame();
-                changeShopLanguage(shopfr);           	
-                break;
-            case 3://POLSKI
-            	language = "pl";
-            	country = "PL";
-            	changeMenuLanguage(language, country);
-               	break;
-            case 4://ANGIELSKI
-            	language = "en";
-            	country = "EN";
-            	changeMenuLanguage(language, country);
-               	break;
-            case 5:
-            	break;         
-            default:
-            	lvl = choice-5;
-           
-        }
-
-    }
     
-    public void changeOpenPlanets() {
-    	for(int i =1; i<9;  i++)
-    	{
-    		if(i<=openLevels)
-    			ifOpen[i]=true;
-    	}
-    		
-    }
-    
-	public void setUpPlanets()
-	{
-        int w=280;
-        int h=110;
-        int x=0;
-        int y =0; 
-        int angle=0;
-       
-        changeOpenPlanets();
-        for(int i = 0; i < 9; i ++)
-        {
-        	
-            angle+=45;
-            x=(w-rr[i])+(int)((dist[i])*Math.sin(angle));
-            y=(h-rr[i])+(int)((dist[i])*Math.cos(angle));
-            planet[i] = new CircleButton(nam[i], col[i],2*rr[i], ifOpen[i]);
-            planet[i].addActionListener(this);
-            String a= Integer.toString(i+5);
-            planet[i].setActionCommand(a);
-            planet[i].setBounds(x, y, 2*rr[i]+100, 2*rr[i]+100);
-            panelCenter.add(planet[i]);
-            
-        }
-	}
-    
-    
-    public static void main(String[] args) {
+    public MainPanel(int width, int height, Planet pl[]) {
         
-        SwingUtilities.invokeLater(
-    			new Runnable(){
-    				public void run() {
-    					new MainMenu();
-    				}
-    		});
+        wid = width;
+        heig = height;
+        fuel = 100;
+        mainPanel = new JPanel();
+        mainPanel.setOpaque(true);
+        mainPanel.setLayout(null);
+        mainPanel.setBounds(0, 0, width, height);
+        
+        planets = pl.clone();
+        rocket = new Rocket(new Point(500,300),  rocketColor);
+   //     rocket = new Rocket(new Point(200,400),  rocketColor);
+        
+        t.restart();
+        addKeyListener(this);
+        setFocusable(true);
+        setFocusTraversalKeysEnabled(false);
+        
+        centerPoint = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
     }
 
+    static void setRocketColor(Color c) {
+        rocketColor = c;
+    }
+    
+    static int getFuel() {
+        return fuel;
+    }
+    
+    void setLevel(int lvl) {
+        level = lvl;
+    }
+    
+    void setDestinationPlanet() {
+        destinationPlanet = planets[level];
+    }
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+    
+        if(bye) {
+            try {
+                image = ImageIO.read(new File("src/imagess/bye.jpg"));
+                super.paintComponent(g);
+                g.drawImage(image, (int)(centerPoint.getX()-(0.5*image.getWidth())), (int)(centerPoint.getY()-(0.5*image.getHeight())), null);
+            } catch (IOException e) {       
+                e.printStackTrace();
+            }
+        }
+        else if(boom) {
+            try {
+                image = ImageIO.read(new File("src/imagess/boom.jpg"));
+                super.paintComponent(g);
+                g.drawImage(image, (int)(centerPoint.getX()-(0.5*image.getWidth())), (int)(centerPoint.getY()-(0.5*image.getHeight())), null);
+            } catch (IOException e) {       
+                e.printStackTrace();
+            }
+        }
+        else if(win) {
+            try {
+                image = ImageIO.read(new File("src/imagess/success.jpg"));
+                super.paintComponent(g);
+                g.drawImage(image, (int)(centerPoint.getX()-(0.5*image.getWidth())), (int)(centerPoint.getY()-(0.5*image.getHeight())), null);
+            } catch (IOException e) {       
+                e.printStackTrace();
+            }
+        }
+        else {
+            super.paintComponent(g);
+            g.setColor(Color.black);
+            g.fillRect(0, 0, wid, heig);
+            rocket.paintRocket(g);
+        
+            // planets
+            for (int i = 0; i<9; i++) {
+                planets[i].paintPlanet(g);  
+            }
+        }
+    
+    }
+    
+
+    
+    public void run() {
+
+        double tmpSunDist=0;
+        
+        double tmpA = 0;
+        double tmpAV = 0;
+        
+        int tmpX = 0; 
+        int tmpY = 0;
+        Point tmpPXY;
+        
+        double Dist =0;
+        double DistX =0;
+        double DistY =0;
+        
+        int tmpRX = 0; 
+        int tmpRY = 0;
+        
+        double tmpVX = 0; 
+        double tmpVY = 0;
+        
+        double tmpaX = 0; 
+        double tmpaY = 0;
+
+        double sina =0;
+        double cosa =0;
+
+        while(czynny) {
+            tmpRX=(int)rocket.getApex().getX();
+            tmpRY=(int)rocket.getApex().getY();
+                        
+            tmpVX=rocket.getVx();
+            tmpVY=rocket.getVy();
+            
+            DistX= planets[0].getXY().getX() - tmpRX;
+            DistY= planets[0].getXY().getY() - tmpRY;
+            Dist = (int) Math.pow(DistX*DistX+DistY*DistY, 0.5);
+            sina = DistY/Dist;
+            cosa = DistX/Dist;
+            tmpaX = cosa*planets[0].getMass()/(Dist*Dist); 
+            tmpaY = sina*planets[0].getMass()/(Dist*Dist);
+            
+            for (int i = 1; i<planets.length; i++)
+            {
+                //ruch planet
+                tmpSunDist=planets[i].getSDist();
+                
+                tmpA=planets[i].getAngle();
+                tmpAV=planets[i].getAngleVelocity();
+                tmpA+=tmpAV;
+                if(tmpA>360)
+                    tmpA=0;
+                planets[i].setAngle(tmpA);
+                
+                tmpX=(int)planets[i].getXY().getX();
+                tmpY=(int)planets[i].getXY().getY();
+                tmpX=(int)planets[0].getXY().getX()+(int) (tmpSunDist*Math.cos(tmpA));
+                tmpY=(int)planets[0].getXY().getY()+(int) (tmpSunDist*Math.sin(tmpA));
+    
+                tmpPXY = new Point(tmpX, tmpY);
+                planets[i].setXY(tmpPXY);   
+                
+                //ruch rakiety  
+                DistX= tmpX - tmpRX;
+                DistY= tmpY - tmpRY;
+                Dist = (int) Math.pow(DistX*DistX+DistY*DistY, 0.5);
+                sina = DistY/Dist;
+                cosa = DistX/Dist;              
+                
+                tmpaX= tmpaX + cosa*planets[i].getMass()/(Dist*Dist);
+                tmpaY= tmpaY + sina*planets[i].getMass()/(Dist*Dist);
+                
+                
+            }
+            //ruch rakiety
+            tmpVX+=tmpaX;
+            tmpVY+=tmpaY;
+            if(tmpVX>10) //ograniczenie prĂ„â„˘dkoÄąâ€şci Äąâ€şwiatÄąâ€ša
+                tmpVX=10;
+            if(tmpVX<-10)
+                tmpVX=-10;
+            
+            if(tmpVY>10)
+                tmpVY=10;
+            if(tmpVY<-10)
+                tmpVY=-10;
+
+            tmpRX+=tmpVX;
+            tmpRY+=tmpVY;
+            
+            tmpPXY = new Point(tmpRX, tmpRY);
+            rocket.setApex(tmpPXY); 
+            
+            rocket.setVx(tmpVX);    
+            rocket.setVy(tmpVY);    
+            
+            DataPanel.velocityLabel.setText(" "+GameInterface.velocity+": ["+MainPanel.rocket.getVx()+", "+(-1*MainPanel.rocket.getVy())+"]");//lang
+            
+            this.repaint();
+            //check if ok
+            czynny = checkIfOutOfBounds();
+            
+            for(int i = 0; i<planets.length; i++) {
+                if(czynny == true) {
+                    czynny = checkPlanetCollision(planets[i]);
+                }
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        
+        }
+    }
+    boolean checkPlanetCollision(Planet p){
+            if(pow((pow(rocket.getApex().getX()-p.getXY().getX(), 2)+pow(rocket.getApex().getY()-p.getXY().getY(), 2)), 0.5)<p.radius) {//zderzenie ze złą planetą
+                if(p != destinationPlanet) {
+                    winner = false;
+                    boom = true;
+                }
+                else {//dobra planeta
+                    winner = true;
+                    MainMenu.money+=50;//nagroda
+                    MainMenu.balance.setText(String.valueOf(MainMenu.money)+"$");
+                    if(MainMenu.openLevels<9)
+                        MainMenu.openLevels+=1;
+                    
+                    win = true;
+                }
+                return false;
+            }
+            else
+                return true;//can continue
+    }
+
+    boolean checkIfOutOfBounds() {//czy rakieta nie odleciała poza ekran      
+        if(rocket.getApex().getX()<0||rocket.getApex().getX()>wid||rocket.getApex().getY()<0||rocket.getApex().getX()>heig) {
+            System.out.println("farewell!");
+            bye = true;
+            winner = false;
+            return false;
+        }
+        else
+            return true;//can continue
+    }
+
+    void updateDataPanel() {
+        DataPanel.fuelBarWidth = (int)(fuel*DataPanel.w/100);
+        DataPanel.fuelLabel.setText(" "+GameInterface.fuelStr+": "+fuel+"%");
+    }
+    @Override
+    public void keyTyped(KeyEvent e) {}
+    @Override
+    public void keyPressed(KeyEvent e) {}
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int code = e.getKeyCode();
+        if(fuel>0) {
+            if(code == KeyEvent.VK_UP) {
+                up();    
+            }
+            if(code == KeyEvent.VK_DOWN) {
+                down();
+            }
+            if(code == KeyEvent.VK_LEFT) {
+                left();
+            }
+            if(code == KeyEvent.VK_RIGHT) {
+                right();
+            }
+            if(!(bye||boom||win)==true)
+            	fuel--;
+            updateDataPanel();
+            Point p = new Point((int)(rocket.getApex().getX()+rocket.getVx()), (int)(rocket.getApex().getY()+rocket.getVy()));
+            rocket.setApex(p);
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {}
+    
+    public void up() {
+        vely = -1;
+        double tmpvy = rocket.getVy();
+        //ograniczenie prędkości
+        if(tmpvy+vely>-10)
+            rocket.setVy(tmpvy+vely);
+        else
+            rocket.setVy(-10);
+        
+    }   
+    public void down() {
+        vely = 1;
+        double tmpvy = rocket.getVy();
+    
+        if(tmpvy+vely<10)
+            rocket.setVy(tmpvy+vely);
+        else
+            rocket.setVy(10);
+    }
+    public void left() {
+        velx = -1;          
+        double tmpvx = rocket.getVx();
+        
+        if(tmpvx+velx>-10)
+            rocket.setVx(tmpvx+velx);
+        else            
+            rocket.setVx(-10);  
+    }
+    public void right() {
+        velx += 1;
+        double tmpvx = rocket.getVx();
+    
+        if(tmpvx+velx<10)
+            rocket.setVx(tmpvx+velx);
+        else            
+            rocket.setVx(10);
+    }
+    
 }
+
