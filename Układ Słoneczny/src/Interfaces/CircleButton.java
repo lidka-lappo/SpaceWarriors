@@ -20,6 +20,7 @@ public class CircleButton extends JButton{
 	private static final long serialVersionUID = 1L;
 	boolean mouseOver = false;
 	boolean mousePressed = false;
+    boolean ifOpen = false;
 	public CircleButton(String text, Color clrf, int d){
 		super(text);
 		setOpaque(false);
