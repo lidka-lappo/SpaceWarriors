@@ -35,6 +35,7 @@ public class ShopFrame extends JFrame  implements ActionListener {
     String poorStatement;
     String colorChooserTitle;
     
+    
     private static final long serialVersionUID = 1L;
     public ShopFrame() throws HeadlessException {
         frame = new JFrame();

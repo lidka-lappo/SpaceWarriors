@@ -20,20 +20,18 @@ public class CircleButton extends JButton{
 	private static final long serialVersionUID = 1L;
 	boolean mouseOver = false;
 	boolean mousePressed = false;
-	static boolean ifChosen = false;
-	static boolean ifOpen = false;
-	public CircleButton(String text, Color clrf, int d, boolean open){
+	public CircleButton(String text, Color clrf, int d){
 		super(text);
 		setOpaque(false);
 		setFocusPainted(false);
 		setBorderPainted(false);
 		diametr =d;
 		fillColor =clrf;
-		ifOpen = open;
 		if(ifOpen)
 			circuitColor = Color.green;
 		else
 			circuitColor = Color.red;
+		
 		MouseAdapter mouseListener = new MouseAdapter(){
 
 			public void mousePressed(MouseEvent me){
@@ -64,6 +62,18 @@ public class CircleButton extends JButton{
 		addMouseMotionListener(mouseListener);		
 	}
 	
+	void setOpen(){
+		circuitColor = Color.green;
+		ifOpen = true;
+		repaint();
+	}
+	
+	void setClose(){
+		circuitColor = Color.red;
+		ifOpen = false;
+		repaint();
+	}
+	
 	private int getDiametr(){
 		return diametr;
 	}
@@ -83,23 +93,26 @@ public void paintComponent(Graphics g){
 		
 		int diameter = getDiametr();
 		int radius = diameter/2;
+		BasicStroke bs1 = new BasicStroke(2);
+		
 		
 		if(mousePressed){
 			g.setColor(fillColor.darker());
-			if(circuitColor == Color.blue)
-				circuitColor = Color.green;
-			else if (circuitColor == Color.red)
-				g.setColor(Color.red);
-			else
-				circuitColor = Color.blue;
-			
+			bs1 = new BasicStroke(5);
 			}
-		else{
+		else
 			g.setColor(fillColor);
-		}
+
+		
+		
+		
+		
+		
+		
+	
 		g.fillOval(getWidth()/2 - radius, getHeight()/2 - radius, diameter, diameter);
 		g.setColor(circuitColor);
-		BasicStroke bs1 = new BasicStroke(2);
+		
 		((Graphics2D) g).setStroke(bs1);
 		
 		g.drawOval(getWidth()/2 - radius, getHeight()/2 - radius, diameter, diameter);
@@ -111,5 +124,6 @@ public void paintComponent(Graphics g){
 		g.drawString(getText(), getWidth()/2 - stringWidth/2, getHeight()/2 + stringHeight/4 - diametr/2-5);
 	}
 }
+
 
 

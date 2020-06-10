@@ -144,7 +144,7 @@ public class GameInterface extends JFrame implements ActionListener{
 	            break;
 	        	case 2:	
 	        		MainPanel.czynny = false;
-	        		frame.dispose();
+	           		frame.dispose();
 	            break; 
 	        }
 	    }

@@ -250,9 +250,11 @@ public class MainPanel extends JPanel implements Runnable, ActionListener, KeyLi
                     winner = true;
                     MainMenu.money+=50;//nagroda
                     MainMenu.balance.setText(String.valueOf(MainMenu.money)+"$");
-                    if(MainMenu.openLevels<9)
-                        MainMenu.openLevels+=1;
-                    
+                    if((MainMenu.nextLevelToOpen<9) &&(level==(MainMenu.nextLevelToOpen+1))) {
+                        MainMenu.planet[MainMenu.nextLevelToOpen].setOpen();
+                        MainMenu.nextLevelToOpen-=1;
+                        
+                    }
                     win = true;
                 }
                 return false;
@@ -297,7 +299,7 @@ public class MainPanel extends JPanel implements Runnable, ActionListener, KeyLi
                 right();
             }
             if(!(bye||boom||win)==true)
-            	fuel--;
+                fuel--;
             updateDataPanel();
             Point p = new Point((int)(rocket.getApex().getX()+rocket.getVx()), (int)(rocket.getApex().getY()+rocket.getVy()));
             rocket.setApex(p);
