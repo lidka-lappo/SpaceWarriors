@@ -7,4 +7,4 @@ Gra polega na locie rakietą w polu siły grawitacyjnej w układzie planetarnym.
 
 Gra ma cel rozrywkowy oraz edukacyjny (na podstawowym poziomie).
 
-Możesz śmiało korzystać z projektu w ramach licencji open source.
+Możesz śmiało korzystać z projektu w ramach licencji beerware.
