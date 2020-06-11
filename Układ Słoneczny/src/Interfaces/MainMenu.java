@@ -62,7 +62,8 @@ public class MainMenu extends JFrame implements ActionListener {
     
     static GameInterface newGame;
     int lvl = 7;
-    static int nextLevelToOpen = 6;
+    static int nextLevelToOpen = 7;
+    static String star ="Sun";
     boolean ifOpen[];
    
     ShopFrame shopfr;
@@ -115,9 +116,9 @@ public class MainMenu extends JFrame implements ActionListener {
  
         nam = new String[] {"SUN", "MERCURY", "VENUS", "EARTH", "MARS", "JUPITER", "SATURN", "URANUS", "NEPTUNE"};
         col = new Color[] {Color.red, Color.gray, Color.orange, Color.blue.darker(), Color.red.darker(), Color.yellow, Color.orange, Color.blue, Color.lightGray};
-        rr = new int[] {40, 8, 12, 12, 8, 40, 40, 24, 24};
-        dist = new int[] {0, 70, 90, 110, 130, 160, 210, 240, 300};
-        ifOpen = new boolean[] {false, false, false, false, false, false, false, false, false};
+        rr = new int[] {40, 8, 12, 12, 8, 40, 35, 24, 24};
+        dist = new int[] {0, 85, 100, 130, 150, 190, 190, 240, 260};
+        
         panelCenter = new JPanel();
         panelCenter.setBackground(Color.black);
         panelCenter.setLayout(null);
@@ -197,6 +198,7 @@ public class MainMenu extends JFrame implements ActionListener {
 
         
         wrongStatement = r.getString("level");
+        if(star=="Sun") {
         planet[0].setText(r.getString("sun"));
         planet[1].setText(r.getString("mer"));
         planet[2].setText(r.getString("ven"));
@@ -206,7 +208,7 @@ public class MainMenu extends JFrame implements ActionListener {
         planet[6].setText(r.getString("sat"));
         planet[7].setText(r.getString("ura"));
         planet[8].setText(r.getString("nep"));
-        
+        }
     }
     public void changeGameIntLanguage(GameInterface gi) {
         if(locale == null) {
@@ -271,6 +273,33 @@ public class MainMenu extends JFrame implements ActionListener {
                 save(nextLevelToOpen);
                 break; 
             case 8:
+                //if(nextLevelToOpen==0) {
+                
+                for(int i = 0; i < 9; i ++)
+                {
+                planet[i].setVisible(false);
+                }
+                if(star =="Sun") {
+                nam = new String[] {"SYRIUS", "GJ 1214 b", "TRAPPIST-1e", "HAT-P-1 b", "KEPLER-22b ", "HD 189733b", "GJ 504b", "Tres-2b", "J1407 b"};
+                col = new Color[] {Color.blue.brighter(), Color.red.brighter(), Color.blue.darker(), Color.MAGENTA.darker(), Color.green.darker(), Color.CYAN, Color.MAGENTA, Color.black, Color.gray};
+                rr = new int[] {50, 8, 12, 20, 8, 40, 40, 24, 24};
+                star ="Sirius";}
+                else {
+                nam = new String[] {"SUN", "MERCURY", "VENUS", "EARTH", "MARS", "JUPITER", "SATURN", "URANUS", "NEPTUNE"};
+                col = new Color[] {Color.red, Color.gray, Color.orange, Color.blue.darker(), Color.red.darker(), Color.yellow, Color.orange, Color.blue, Color.lightGray};
+                rr = new int[] {40, 8, 12, 12, 8, 40, 35, 24, 24};
+                star ="Sun";
+                }
+                
+                nextLevelToOpen =7;
+                setUpPlanets();
+                
+                //}
+                
+                nam = new String[] {"SUN", "MERCURY", "VENUS", "EARTH", "MARS", "JUPITER", "SATURN", "URANUS", "NEPTUNE"};
+                col = new Color[] {Color.red, Color.gray, Color.orange, Color.blue.darker(), Color.red.darker(), Color.yellow, Color.orange, Color.blue, Color.lightGray};
+                rr = new int[] {40, 8, 12, 12, 8, 40, 35, 24, 24};
+                
                 break; 
             default:
                 if(planet[choice-8].ifOpen == false) 
@@ -289,12 +318,12 @@ public class MainMenu extends JFrame implements ActionListener {
         int h=110;
         int x=0;
         int y =0; 
-        int angle=0;
+        int angle=-45;
        
       
         for(int i = 0; i < 9; i ++)
         {
-            
+      
             angle+=45;
             x=(w-rr[i])+(int)((dist[i])*Math.sin(angle));
             y=(h-rr[i])+(int)((dist[i])*Math.cos(angle));

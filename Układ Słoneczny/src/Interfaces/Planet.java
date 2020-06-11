@@ -106,6 +106,12 @@ public class Planet { //+sun
 				g2d.setStroke(new BasicStroke(2));
 				g2d.drawLine((int)getXY().getX()-getR(), (int)getXY().getY()-getR(), (int)getXY().getX()+getR(), (int)getXY().getY()+getR());
 		 }
+		 if (getName()=="J1407 b") {
+				g.setColor(Color.white);
+				g2d.setStroke(new BasicStroke(2));
+				g2d.drawLine((int)getXY().getX()-3*getR(), (int)getXY().getY()-3*getR(), (int)getXY().getX()+3*getR(), (int)getXY().getY()+3*getR());
+		 }
+		 
 		 //destination planet marked
 		 if(this == MainPanel.destinationPlanet) {
 			 g.setColor(Color.white);

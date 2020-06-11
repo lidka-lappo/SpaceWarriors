@@ -250,7 +250,7 @@ public class MainPanel extends JPanel implements Runnable, ActionListener, KeyLi
                     winner = true;
                     MainMenu.money+=50;//nagroda
                     MainMenu.balance.setText(String.valueOf(MainMenu.money)+"$");
-                    if((MainMenu.nextLevelToOpen<9) &&(level==(MainMenu.nextLevelToOpen+1))) {
+                    if((MainMenu.nextLevelToOpen>0) &&(level==(MainMenu.nextLevelToOpen+1))) {
                         MainMenu.planet[MainMenu.nextLevelToOpen].setOpen();
                         MainMenu.nextLevelToOpen-=1;
                         
@@ -264,7 +264,7 @@ public class MainPanel extends JPanel implements Runnable, ActionListener, KeyLi
     }
 
     boolean checkIfOutOfBounds() {//czy rakieta nie odleciała poza ekran      
-        if(rocket.getApex().getX()<0||rocket.getApex().getX()>wid||rocket.getApex().getY()<0||rocket.getApex().getX()>heig) {
+        if((rocket.getApex().getX()<0)||(rocket.getApex().getX()>wid)||(rocket.getApex().getY()<0)||(rocket.getApex().getY()>heig)) {
             System.out.println("farewell!");
             bye = true;
             winner = false;

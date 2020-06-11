@@ -40,6 +40,9 @@ public class GameInterface extends JFrame implements ActionListener{
 	static ExecutorService exec;
 	
 	String nam[];
+	Color col[];
+	int rr[];
+	int m[];
 	static String velocity;
 	static String fuelStr;
 	 
@@ -67,20 +70,26 @@ public class GameInterface extends JFrame implements ActionListener{
 		//planets
 		 int sunX = width/2;
 		 int sunY = height/2;
-		 
 		 int dist[] = new int[] {0, 70, 90, 110, 130, 160, 210, 240, 300};
-		 int rr[] = new int[] {40, 8, 12, 12, 8, 40, 40, 24, 24};
 		 double a[] = new double[] {0, 90, 10, 20, 30, 40, 50, 60, 70};
-	     double aV[] = new double[] {0, 0.09, 0.07, 0.06, 0.05, 0.04, 0.03, 0.02, 0.01};
-	     Color col[] = new Color[] {Color.red, Color.gray, Color.orange, Color.blue, Color.red, Color.yellow, Color.orange, Color.blue, Color.lightGray};
-	     int m[] = new int[] {1000, 10, 20, 20, 10, 50, 45 ,25 ,30};
-	 
+		 double aV[] = new double[] {0, 0.09, 0.07, 0.06, 0.05, 0.04, 0.03, 0.02, 0.01};
+	if(MainMenu.star == "Sun") {
+		 rr = new int[] {40, 8, 12, 12, 8, 40, 40, 24, 24};
+	     col = new Color[] {Color.red, Color.gray, Color.orange, Color.blue, Color.red, Color.yellow, Color.orange, Color.blue, Color.lightGray};
+	     m = new int[] {1000, 10, 20, 20, 10, 50, 45 ,25 ,30};
 	     if(MainMenu.locale == null) {
 	    	 MainMenu.locale = new Locale(MainMenu.language, MainMenu.country);
 	    	 MainMenu.r = ResourceBundle.getBundle("Bundle", MainMenu.locale);
-	    	}
+	     }
 	     nam = new String[] {MainMenu.r.getString("sun"),MainMenu.r.getString("mer"),MainMenu.r.getString("ven"),MainMenu.r.getString("ear"),MainMenu.r.getString("mar"),MainMenu.r.getString("jup"),MainMenu.r.getString("sat"),MainMenu.r.getString("ura"),MainMenu.r.getString("nep")};
-	 	 
+		 }
+	else {
+			 col = new Color[] {Color.blue.brighter(), Color.red.brighter(), Color.blue.darker(), Color.MAGENTA.darker(), Color.green.darker(), Color.CYAN, Color.MAGENTA, Color.black, Color.gray};
+              rr = new int[] {50, 8, 12, 20, 8, 40, 40, 24, 24};
+			  m = new int[] {1000, 10, 20, 20, 10, 50, 45 ,25 ,30};
+			  nam = new String[] {"SYRIUS", "GJ 1214 b", "TRAPPIST-1e", "HAT-P-1 b", "KEPLER-22b ", "HD 189733b", "GJ 504b", "Tres-2b", "J1407 b"};
+			 
+		 }
 	     Point xxyy[]= new Point[nam.length];
 	  	 planets = new Planet[nam.length]; 
 	  	 
@@ -91,7 +100,8 @@ public class GameInterface extends JFrame implements ActionListener{
 	       	planets[i].info();
 	     }
 		      
-		 mainPanel = new MainPanel(650, 650, planets);
+		 //mainPanel = new MainPanel(650, 650, planets);
+		 mainPanel = new MainPanel(width, height, planets);
 		 mainPanel.setBackground(Color.black);
 		 mainPanel.setLayout(null);
 		 mainPanel.setBounds(0, 0, width, height);		
